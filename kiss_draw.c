@@ -23,6 +23,7 @@
 */
 
 #include "kiss_sdl.h"
+#include <r_types.h>
 
 kiss_font kiss_textfont, kiss_buttonfont;
 kiss_image kiss_normal, kiss_prelight, kiss_active, kiss_bar,
@@ -43,7 +44,7 @@ SDL_Color kiss_green = {0, 150, 0, 255};
 SDL_Color kiss_blue = {0, 0, 255, 255};
 SDL_Color kiss_lightblue = {200, 225, 255, 255};
 
-unsigned int kiss_getticks(void)
+ut32 kiss_getticks(void)
 {
 	return SDL_GetTicks();
 }

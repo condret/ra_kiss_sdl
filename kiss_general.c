@@ -23,6 +23,7 @@
 */
 
 #include "kiss_sdl.h"
+#include <r_types.h>
 
 int kiss_makerect(SDL_Rect *rect, int x, int y, int w, int h)
 {
@@ -86,7 +87,7 @@ int kiss_utf8fix(char *str)
 
 char *kiss_string_copy(char *dest, size_t size, char *str1, char *str2)
 {
-	unsigned int len;
+	ut32 len;
 	char *p;
 
 	if (!dest) return NULL;

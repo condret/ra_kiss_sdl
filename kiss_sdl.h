@@ -19,6 +19,7 @@
   kiss_sdl version 1.2.0
 */
 
+#include <r_types.h>
 #ifndef _kiss_sdl_h
 #define _kiss_sdl_h
 
@@ -162,7 +163,7 @@ typedef struct kiss_vscrollbar {
 	int maxpos;
 	double fraction;
 	double step;
-	unsigned int lasttick;
+	ut32 lasttick;
 	int downclicked;
 	int upclicked;
 	int sliderclicked;
@@ -181,7 +182,7 @@ typedef struct kiss_hscrollbar {
 	int maxpos;
 	double fraction;
 	double step;
-	unsigned int lasttick;
+	ut32 lasttick;
 	int leftclicked;
 	int rightclicked;
 	int sliderclicked;
@@ -199,7 +200,7 @@ typedef struct kiss_progressbar {
 	double fraction;
 	double step;
 	SDL_Color bg;
-	unsigned int lasttick;
+	ut32 lasttick;
 	int run;
 	kiss_image bar;
 	kiss_window *wdw;
@@ -298,7 +299,7 @@ int kiss_array_appendstring(kiss_array *a, int id, char *text1, char *text2);
 int kiss_array_insert(kiss_array *a, int index, int id, void *data);
 int kiss_array_remove(kiss_array *a, int index);
 int kiss_array_free(kiss_array *a);
-unsigned int kiss_getticks(void);
+ut32 kiss_getticks(void);
 int kiss_maxlength(kiss_font font, int width, char *str1, char *str2);
 int kiss_textwidth(kiss_font font, char *str1, char *str2);
 int kiss_renderimage(SDL_Renderer *renderer, kiss_image image,

@@ -45,8 +45,8 @@ C = gcc
 
 ### Linux
 
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
-CFLAGS = -Wall -c $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf r_util)
+CFLAGS = -Wall -c $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf r_util)
 BIN1 = kiss_example1
 BIN2 = kiss_example2
 
