@@ -24,6 +24,7 @@
 
 #include "kiss_sdl.h"
 #include <r_types.h>
+#include <stdio.h>
 
 int kiss_makerect (SDL_Rect *rect, int x, int y, int w, int h) {
 	if (!rect) {
@@ -103,27 +104,19 @@ int kiss_utf8fix (char *str) {
 }
 
 char *kiss_string_copy (char *dest, size_t size, char *str1, char *str2) {
-	ut32 len;
-	char *p;
-
 	if (!dest) {
 		return NULL;
 	}
-	strcpy (dest, "");
-	if (size < 2) {
+	dest[0] = '\x00';
+	if (size < 2 || !(str1 || str2)) {
 		return dest;
 	}
-	if (str1) {
-		strncpy (dest, str1, size);
+	if (str1 && str2) {
+		snprintf (dest, size, "%s%s", str1, str2);
+	} else {
+		strncpy (dest, (char *)((size_t)str1 | (size_t)str2), size - 1);
+		dest[size - 1] = '\x00';
 	}
-	dest[size - 1] = 0;
-	len = strlen (dest);
-	if (!str2 || size - 1 <= len) {
-		return dest;
-	}
-	p = dest;
-	strncpy (p + len, str2, size - len);
-	dest[size - 1] = 0;
 	kiss_utf8fix (dest);
 	return dest;
 }
@@ -205,12 +198,10 @@ int kiss_array_append (kiss_array *a, int id, void *data) {
 }
 
 int kiss_array_appendstring (kiss_array *a, int id, char *text1, char *text2) {
-	char *p;
-
 	if (!a) {
 		return -1;
 	}
-	p = (char *)malloc (KISS_MAX_LENGTH);
+	char *p = (char *)malloc (KISS_MAX_LENGTH);
 	kiss_string_copy (p, KISS_MAX_LENGTH, text1, text2);
 	kiss_array_append (a, id, p);
 	return 0;
