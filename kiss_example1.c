@@ -218,11 +218,14 @@ int main (int argc, char **argv) {
 		kiss_screen_height);
 	kiss_textbox_new (&textbox1, &window1, 1, &a1, kiss_screen_width / 2 - (2 * textbox_width + 2 * kiss_up.w - kiss_edge) / 2,
 		3 * kiss_normal.h, textbox_width, textbox_height);
-	kiss_vscrollbar_new (&vscrollbar1, &window1, textbox1.rect.x + textbox_width, textbox1.rect.y, textbox_height);
+	kiss_vscrollbar_new (&vscrollbar1, &window1, NULL, textbox1.rect.x + textbox_width, textbox1.rect.y, textbox_height);
 	kiss_textbox_new (&textbox2, &window1, 1, &a2,
 		vscrollbar1.uprect.x + kiss_up.w, textbox1.rect.y,
 		textbox_width, textbox_height);
-	kiss_vscrollbar_new (&vscrollbar2, &window1, textbox2.rect.x + textbox_width, vscrollbar1.uprect.y, textbox_height);
+	SDL_Rect scroll_wheel_rect;
+	kiss_makerect (&scroll_wheel_rect, textbox2.rect.x, textbox2.rect.y, textbox_width + kiss_down.w, textbox_height);
+	kiss_vscrollbar_new (&vscrollbar2, &window1, &scroll_wheel_rect,
+		textbox2.rect.x + textbox_width, vscrollbar1.uprect.y, textbox_height);
 	kiss_label_new (&label1, &window1, "Folders", textbox1.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
 	kiss_label_new (&label2, &window1, "Files", textbox2.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
 	kiss_label_new (&label_sel, &window1, "", textbox1.rect.x + kiss_edge, textbox1.rect.y + textbox_height + kiss_normal.h);

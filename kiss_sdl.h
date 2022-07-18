@@ -145,6 +145,7 @@ typedef struct kiss_vscrollbar {
 	SDL_Rect uprect;
 	SDL_Rect downrect;
 	SDL_Rect sliderrect;
+	SDL_Rect *wheelrect;
 	int maxpos;
 	double fraction;
 	double step;
@@ -309,7 +310,7 @@ int kiss_selectbutton_event (kiss_selectbutton *selectbutton,
 int kiss_selectbutton_draw (kiss_selectbutton *selectbutton,
 	SDL_Renderer *renderer);
 int kiss_vscrollbar_new (kiss_vscrollbar *vscrollbar, kiss_window *wdw,
-	int x, int y, int h);
+	SDL_Rect *wheelrect, int x, int y, int h);
 int kiss_vscrollbar_event (kiss_vscrollbar *vscrollbar, SDL_Event *event,
 	int *draw);
 int kiss_vscrollbar_draw (kiss_vscrollbar *vscrollbar,

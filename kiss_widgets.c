@@ -245,7 +245,7 @@ int kiss_selectbutton_draw (kiss_selectbutton *selectbutton, SDL_Renderer *rende
 	return 1;
 }
 
-int kiss_vscrollbar_new (kiss_vscrollbar *vscrollbar, kiss_window *wdw, int x, int y, int h) {
+int kiss_vscrollbar_new (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
 	if (!vscrollbar) {
 		return -1;
 	}
@@ -269,6 +269,7 @@ int kiss_vscrollbar_new (kiss_vscrollbar *vscrollbar, kiss_window *wdw, int x, i
 		vscrollbar->down.w, vscrollbar->down.h + kiss_slider_padding);
 	kiss_makerect (&vscrollbar->sliderrect, x, y + vscrollbar->uprect.h + kiss_edge,
 		vscrollbar->vslider.w, vscrollbar->vslider.h);
+	vscrollbar->wheelrect = wheelrect;
 	vscrollbar->maxpos = h - 2 * kiss_slider_padding - 2 * kiss_edge -
 		vscrollbar->up.h - vscrollbar->down.h - vscrollbar->vslider.h;
 	vscrollbar->fraction = 0.;
@@ -367,6 +368,20 @@ int kiss_vscrollbar_event (kiss_vscrollbar *vscrollbar, SDL_Event *event, int *d
 		(event->motion.state & SDL_BUTTON (SDL_BUTTON_LEFT)) && vscrollbar->sliderclicked) {
 		vnewpos (vscrollbar, 1. * event->motion.yrel / vscrollbar->maxpos, draw);
 		return 1;
+	} else if (event->type == SDL_MOUSEWHEEL && vscrollbar->wheelrect) {
+		int x, y;
+		SDL_GetMouseState (&x, &y);
+		if (!kiss_pointinrect (x, y, vscrollbar->wheelrect)) {
+			return 0;
+		}
+		if (event->wheel.y > 0) {
+			vnewpos (vscrollbar, -vscrollbar->step, draw);
+			return 1;
+		}
+		if (event->wheel.y < 0) {
+			vnewpos (vscrollbar, vscrollbar->step, draw);
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -818,7 +833,7 @@ int kiss_combobox_new (kiss_combobox *combobox, kiss_window *wdw,
 		a, x, y + combobox->entry.rect.h, w, h) == -1) {
 		return -1;
 	}
-	if (kiss_vscrollbar_new (&combobox->vscrollbar, &combobox->window,
+	if (kiss_vscrollbar_new (&combobox->vscrollbar, &combobox->window, &combobox->window.rect,
 		x + combobox->textbox.rect.w, combobox->textbox.rect.y, combobox->textbox.rect.h) == -1) {
 		return -1;
 	}
