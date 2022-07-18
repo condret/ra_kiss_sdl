@@ -161,25 +161,25 @@ int main (int argc, char **argv) {
 
 	/* Arrange the widgets nicely relative to each other */
 	kiss_window window;
-	kiss_window_new (&window, NULL, 1, 0, 0, kiss_screen_width, kiss_screen_height);
-	kiss_label_new (&label1, &window, "Population",
+	kiss_window_init (&window, NULL, 1, 0, 0, kiss_screen_width, kiss_screen_height);
+	kiss_label_init (&label1, &window, "Population",
 		kiss_screen_width / 2 - (combobox_width + kiss_up.w - kiss_edge) / 2 + kiss_edge,
 		6 * kiss_textfont.lineheight);
-	kiss_selectbutton_new (&select1, &window,
+	kiss_selectbutton_init (&select1, &window,
 		label1.rect.x + combobox_width + kiss_up.w - kiss_edge - kiss_selected.w,
 		label1.rect.y + kiss_textfont.ascent - kiss_selected.h);
-	kiss_label_new (&label2, &window, "Area", label1.rect.x,
+	kiss_label_init (&label2, &window, "Area", label1.rect.x,
 		label1.rect.y + 2 * kiss_textfont.lineheight);
-	kiss_selectbutton_new (&select2, &window, select1.rect.x,
+	kiss_selectbutton_init (&select2, &window, select1.rect.x,
 		label2.rect.y + kiss_textfont.ascent - kiss_selected.h);
-	kiss_combobox_new (&combobox, &window, "none", &a,
+	kiss_combobox_init (&combobox, &window, "none", &a,
 		label1.rect.x - kiss_edge, label2.rect.y + 2 * kiss_textfont.lineheight,
 		combobox_width, combobox_height);
-	kiss_entry_new (&entry, &window, 1, "", kiss_screen_width / 2 - entry_width / 2 + kiss_edge,
+	kiss_entry_init (&entry, &window, 1, "", kiss_screen_width / 2 - entry_width / 2 + kiss_edge,
 		combobox.entry.rect.y + combobox.entry.rect.h + 2 * kiss_textfont.lineheight + kiss_border,
 		entry_width);
-	kiss_hscrollbar_new (&hscrollbar, &window, entry.rect.x, entry.rect.y + entry.rect.h, entry.rect.w);
-	kiss_button_new (&button_ok, &window, "OK", entry.rect.x + entry.rect.w - kiss_edge - kiss_normal.w,
+	kiss_hscrollbar_init (&hscrollbar, &window, entry.rect.x, entry.rect.y + entry.rect.h, entry.rect.w);
+	kiss_button_init (&button_ok, &window, "OK", entry.rect.x + entry.rect.w - kiss_edge - kiss_normal.w,
 		entry.rect.y + entry.rect.h + kiss_left.h + 2 * kiss_normal.h);
 
 	select1.selected = 1;

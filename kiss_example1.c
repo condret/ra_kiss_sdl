@@ -214,37 +214,37 @@ int main (int argc, char **argv) {
 	kiss_array_append (&objects, ARRAY_TYPE, &a2);
 
 	/* Arrange the widgets nicely relative to each other */
-	kiss_window_new (&window1, NULL, 1, 0, 0, kiss_screen_width,
+	kiss_window_init (&window1, NULL, 1, 0, 0, kiss_screen_width,
 		kiss_screen_height);
-	kiss_textbox_new (&textbox1, &window1, 1, &a1, kiss_screen_width / 2 - (2 * textbox_width + 2 * kiss_up.w - kiss_edge) / 2,
+	kiss_textbox_init (&textbox1, &window1, 1, &a1, kiss_screen_width / 2 - (2 * textbox_width + 2 * kiss_up.w - kiss_edge) / 2,
 		3 * kiss_normal.h, textbox_width, textbox_height);
-	kiss_vscrollbar_new (&vscrollbar1, &window1, NULL, textbox1.rect.x + textbox_width, textbox1.rect.y, textbox_height);
-	kiss_textbox_new (&textbox2, &window1, 1, &a2,
+	kiss_vscrollbar_init (&vscrollbar1, &window1, NULL, textbox1.rect.x + textbox_width, textbox1.rect.y, textbox_height);
+	kiss_textbox_init (&textbox2, &window1, 1, &a2,
 		vscrollbar1.uprect.x + kiss_up.w, textbox1.rect.y,
 		textbox_width, textbox_height);
 	SDL_Rect scroll_wheel_rect;
 	kiss_makerect (&scroll_wheel_rect, textbox2.rect.x, textbox2.rect.y, textbox_width + kiss_down.w, textbox_height);
-	kiss_vscrollbar_new (&vscrollbar2, &window1, &scroll_wheel_rect,
+	kiss_vscrollbar_init (&vscrollbar2, &window1, &scroll_wheel_rect,
 		textbox2.rect.x + textbox_width, vscrollbar1.uprect.y, textbox_height);
-	kiss_label_new (&label1, &window1, "Folders", textbox1.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
-	kiss_label_new (&label2, &window1, "Files", textbox2.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
-	kiss_label_new (&label_sel, &window1, "", textbox1.rect.x + kiss_edge, textbox1.rect.y + textbox_height + kiss_normal.h);
-	kiss_entry_new (&entry, &window1, 1, "kiss", textbox1.rect.x,
+	kiss_label_init (&label1, &window1, "Folders", textbox1.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
+	kiss_label_init (&label2, &window1, "Files", textbox2.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);
+	kiss_label_init (&label_sel, &window1, "", textbox1.rect.x + kiss_edge, textbox1.rect.y + textbox_height + kiss_normal.h);
+	kiss_entry_init (&entry, &window1, 1, "kiss", textbox1.rect.x,
 		label_sel.rect.y + kiss_textfont.lineheight,
 		2 * textbox_width + 2 * kiss_up.w + kiss_edge);
-	kiss_button_new (&button_cancel, &window1, "Cancel",
+	kiss_button_init (&button_cancel, &window1, "Cancel",
 		entry.rect.x + entry.rect.w - kiss_edge - kiss_normal.w,
 		entry.rect.y + entry.rect.h + kiss_normal.h);
-	kiss_button_new (&button_ok1, &window1, "OK", button_cancel.rect.x - 2 * kiss_normal.w, button_cancel.rect.y);
-	kiss_window_new (&window2, NULL, 1, kiss_screen_width / 2 - window2_width / 2,
+	kiss_button_init (&button_ok1, &window1, "OK", button_cancel.rect.x - 2 * kiss_normal.w, button_cancel.rect.y);
+	kiss_window_init (&window2, NULL, 1, kiss_screen_width / 2 - window2_width / 2,
 		kiss_screen_height / 2 - window2_height / 2, window2_width, window2_height);
-	kiss_label_new (&label_res, &window2, "", window2.rect.x + kiss_up.w, window2.rect.y + kiss_vslider.h);
+	kiss_label_init (&label_res, &window2, "", window2.rect.x + kiss_up.w, window2.rect.y + kiss_vslider.h);
 	label_res.textcolor = kiss_blue;
-	kiss_progressbar_new (&progressbar, &window2,
+	kiss_progressbar_init (&progressbar, &window2,
 		window2.rect.x + kiss_up.w - kiss_edge,
 		window2.rect.y + window2.rect.h / 2 - kiss_bar.h / 2 - kiss_border,
 		window2.rect.w - 2 * kiss_up.w + 2 * kiss_edge);
-	kiss_button_new (&button_ok2, &window2, "OK", window2.rect.x + window2.rect.w / 2 - kiss_normal.w / 2,
+	kiss_button_init (&button_ok2, &window2, "OK", window2.rect.x + window2.rect.w / 2 - kiss_normal.w / 2,
 		progressbar.rect.y + progressbar.rect.h +
 			2 * kiss_vslider.h);
 

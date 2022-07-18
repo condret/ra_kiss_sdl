@@ -24,7 +24,7 @@
 
 #include "kiss_sdl.h"
 
-int kiss_window_new (kiss_window *window, kiss_window *wdw, int decorate,
+int kiss_window_init (kiss_window *window, kiss_window *wdw, int decorate,
 	int x, int y, int w, int h) {
 	if (!window) {
 		return -1;
@@ -64,7 +64,7 @@ int kiss_window_draw (kiss_window *window, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_label_new (kiss_label *label, kiss_window *wdw, char *text, int x, int y) {
+int kiss_label_init (kiss_label *label, kiss_window *wdw, char *text, int x, int y) {
 	if (!label || !text) {
 		return -1;
 	}
@@ -104,7 +104,7 @@ int kiss_label_draw (kiss_label *label, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_button_new (kiss_button *button, kiss_window *wdw, char *text, int x, int y) {
+int kiss_button_init (kiss_button *button, kiss_window *wdw, char *text, int x, int y) {
 	if (!button || !text) {
 		return -1;
 	}
@@ -192,7 +192,7 @@ int kiss_button_draw (kiss_button *button, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_selectbutton_new (kiss_selectbutton *selectbutton, kiss_window *wdw, int x, int y) {
+int kiss_selectbutton_init (kiss_selectbutton *selectbutton, kiss_window *wdw, int x, int y) {
 	if (!selectbutton) {
 		return -1;
 	}
@@ -245,7 +245,7 @@ int kiss_selectbutton_draw (kiss_selectbutton *selectbutton, SDL_Renderer *rende
 	return 1;
 }
 
-int kiss_vscrollbar_new (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
+int kiss_vscrollbar_init (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
 	if (!vscrollbar) {
 		return -1;
 	}
@@ -403,7 +403,7 @@ int kiss_vscrollbar_draw (kiss_vscrollbar *vscrollbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_hscrollbar_new (kiss_hscrollbar *hscrollbar, kiss_window *wdw, int x, int y, int w) {
+int kiss_hscrollbar_init (kiss_hscrollbar *hscrollbar, kiss_window *wdw, int x, int y, int w) {
 	if (!hscrollbar) {
 		return -1;
 	}
@@ -547,7 +547,7 @@ int kiss_hscrollbar_draw (kiss_hscrollbar *hscrollbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_progressbar_new (kiss_progressbar *progressbar, kiss_window *wdw, int x, int y, int w) {
+int kiss_progressbar_init (kiss_progressbar *progressbar, kiss_window *wdw, int x, int y, int w) {
 	if (!progressbar || w < 2 * kiss_border + 1) {
 		return -1;
 	}
@@ -603,7 +603,7 @@ int kiss_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer
 	return 1;
 }
 
-int kiss_entry_new (kiss_entry *entry, kiss_window *wdw, int decorate, char *text, int x, int y, int w) {
+int kiss_entry_init (kiss_entry *entry, kiss_window *wdw, int decorate, char *text, int x, int y, int w) {
 	if (!entry || !text) {
 		return -1;
 	}
@@ -704,7 +704,7 @@ int kiss_entry_draw (kiss_entry *entry, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_textbox_new (kiss_textbox *textbox, kiss_window *wdw, int decorate,
+int kiss_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate,
 	kiss_array *a, int x, int y, int w, int h) {
 	if (!textbox || !a) {
 		return -1;
@@ -817,7 +817,7 @@ int kiss_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int kiss_combobox_new (kiss_combobox *combobox, kiss_window *wdw,
+int kiss_combobox_init (kiss_combobox *combobox, kiss_window *wdw,
 	char *text, kiss_array *a, int x, int y, int w, int h) {
 	if (!combobox || !a || !text) {
 		return -1;
@@ -825,15 +825,15 @@ int kiss_combobox_new (kiss_combobox *combobox, kiss_window *wdw,
 	if (combobox->combo.magic != KISS_MAGIC) {
 		combobox->combo = kiss_combo;
 	}
-	kiss_entry_new (&combobox->entry, wdw, 1, text, x, y, w);
+	kiss_entry_init (&combobox->entry, wdw, 1, text, x, y, w);
 	strcpy (combobox->text, combobox->entry.text);
-	kiss_window_new (&combobox->window, NULL, 0, x,
+	kiss_window_init (&combobox->window, NULL, 0, x,
 		y + combobox->entry.rect.h, w + combobox->vscrollbar.up.w, h);
-	if (kiss_textbox_new (&combobox->textbox, &combobox->window, 1,
+	if (kiss_textbox_init (&combobox->textbox, &combobox->window, 1,
 		a, x, y + combobox->entry.rect.h, w, h) == -1) {
 		return -1;
 	}
-	if (kiss_vscrollbar_new (&combobox->vscrollbar, &combobox->window, &combobox->window.rect,
+	if (kiss_vscrollbar_init (&combobox->vscrollbar, &combobox->window, &combobox->window.rect,
 		x + combobox->textbox.rect.w, combobox->textbox.rect.y, combobox->textbox.rect.h) == -1) {
 		return -1;
 	}
