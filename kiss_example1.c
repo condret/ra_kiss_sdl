@@ -23,6 +23,7 @@
 */
 
 #include "kiss_sdl.h"
+#include <r_util.h>
 
 static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar) {
 	qsort (textbox->array->data, textbox->array->length, sizeof (void *),
@@ -38,45 +39,47 @@ static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar) {
 
 /* Read directory entries into the textboxes */
 static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
-	kiss_textbox *textbox2, kiss_vscrollbar *vscrollbar2,
-	kiss_label *label_sel) {
-	kiss_dirent *ent;
-	kiss_stat s;
-	kiss_dir *dir;
-	char buf[KISS_MAX_LENGTH], ending[2];
+	kiss_textbox *textbox2, kiss_vscrollbar *vscrollbar2, kiss_label *label_sel) {
 
 	kiss_array_free (textbox1->array);
 	kiss_array_free (textbox2->array);
 	kiss_array_new (textbox1->array);
 	kiss_array_new (textbox2->array);
-	kiss_getcwd (buf, KISS_MAX_LENGTH);
-	strcpy (ending, "/");
-	if (buf[0] == 'C') {
-		strcpy (ending, "\\");
+	char *dir_path = r_sys_getdir ();
+	if (!dir_path) {
+		return;
 	}
-	if (!strcmp (buf, "/") || !strcmp (buf, "C:\\")) {
-		strcpy (ending, "");
+
+	RStrBuf *sbuf = r_strbuf_new (dir_path);
+	if (!sbuf) {
+		free (dir_path);
+		return;
 	}
-	kiss_string_copy (label_sel->text, (2 * textbox1->rect.w + 2 * kiss_up.w) / kiss_textfont.advance, buf, ending);
-#ifdef _MSC_VER
-	dir = kiss_opendir ("*");
-#else
-	dir = kiss_opendir (".");
-#endif
-	while ((ent = kiss_readdir (dir))) {
-		if (!ent->d_name) {
-			continue;
+	if (dir_path[0] == '/') {
+		if (!r_str_endswith (dir_path, "/")) {
+			r_strbuf_append (sbuf, "/");
 		}
-		kiss_getstat (ent->d_name, &s);
-		if (kiss_isdir (s)) {
-			kiss_array_appendstring (textbox1->array, 0,
-				ent->d_name, "/");
-		} else if (kiss_isreg (s)) {
-			kiss_array_appendstring (textbox2->array, 0,
-				ent->d_name, NULL);
+	} else {
+		if (!r_str_endswith (dir_path, "\\")) {
+			r_strbuf_append (sbuf, "\\");
 		}
 	}
-	kiss_closedir (dir);
+	strncpy (label_sel->text, r_strbuf_get (sbuf), (2 * textbox1->rect.w + 2 * kiss_up.w) / kiss_textfont.advance);
+	r_strbuf_free (sbuf);
+
+	RList *dir = r_sys_dir (dir_path);
+	R_FREE (dir_path);
+
+	while (r_list_length (dir)) {
+		char *file = r_list_pop (dir);
+		if (r_file_is_directory (file)) {
+			kiss_array_appendstring (textbox1->array, 0, file, "/");
+		} else if (r_file_is_regular (file)) {
+			kiss_array_appendstring (textbox2->array, 0, file, NULL);
+		}
+		dir->free (file);
+	}
+	r_list_free (dir);
 	text_reset (textbox1, vscrollbar1);
 	text_reset (textbox2, vscrollbar2);
 }
@@ -85,16 +88,13 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
 static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 	kiss_vscrollbar *vscrollbar1, kiss_textbox *textbox2,
 	kiss_vscrollbar *vscrollbar2, kiss_label *label_sel, int *draw) {
-	int index;
 
 	if (kiss_textbox_event (textbox, e, draw)) {
-		index = textbox->firstline + textbox->selectedline;
+		int index = textbox->firstline + textbox->selectedline;
 		if (strcmp ((char *)kiss_array_data (textbox->array, index), "")) {
 			textbox->selectedline = -1;
-			kiss_chdir ((char *)kiss_array_data (textbox->array,
-				index));
-			dirent_read (textbox, vscrollbar1, textbox2,
-				vscrollbar2, label_sel);
+			r_sys_chdir ((char *)kiss_array_data (textbox->array, index));
+			dirent_read (textbox, vscrollbar1, textbox2, vscrollbar2, label_sel);
 			*draw = 1;
 		}
 	}
@@ -107,9 +107,7 @@ static void vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
 	if (kiss_vscrollbar_event (vscrollbar, e, draw) &&
 		textbox1->array->length - textbox1->maxlines > 0) {
 		firstline = (int)((textbox1->array->length -
-					  textbox1->maxlines) *
-				vscrollbar->fraction +
-			0.5);
+			textbox1->maxlines) * vscrollbar->fraction + 0.5);
 		if (firstline >= 0) {
 			textbox1->firstline = firstline;
 		}
@@ -123,13 +121,9 @@ static void textbox2_event(kiss_textbox *textbox, SDL_Event *e,
 
 	if (kiss_textbox_event (textbox, e, draw)) {
 		index = textbox->firstline + textbox->selectedline;
-		if (strcmp ((char *)kiss_array_data (textbox->array, index),
-			    "")) {
-			kiss_string_copy (entry->text,
-				entry->textwidth / kiss_textfont.advance,
-				(char *)kiss_array_data (textbox->array,
-					index),
-				NULL);
+		if (strcmp ((char *)kiss_array_data (textbox->array, index), "")) {
+			kiss_string_copy (entry->text, entry->textwidth / kiss_textfont.advance,
+				(char *)kiss_array_data (textbox->array, index), NULL);
 			*draw = 1;
 		}
 	}
@@ -142,11 +136,10 @@ static void vscrollbar2_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
 	if (kiss_vscrollbar_event (vscrollbar, e, draw) &&
 		textbox2->array->length) {
 		firstline = (int)((textbox2->array->length -
-					  textbox2->maxlines) *
-				vscrollbar->fraction +
-			0.5);
-		if (firstline >= 0)
+			textbox2->maxlines) * vscrollbar->fraction + 0.5);
+		if (firstline >= 0) {
 			textbox2->firstline = firstline;
+		}
 		*draw = 1;
 	}
 }
@@ -158,8 +151,9 @@ static void button_ok1_event(kiss_button *button, SDL_Event *e,
 	char buf[KISS_MAX_LENGTH];
 
 	if (kiss_button_event (button, e, draw)) {
-		kiss_string_copy (buf, kiss_maxlength (kiss_textfont, window2->rect.w - 2 * kiss_vslider.w, label_sel->text, entry->text),
-			label_sel->text, entry->text);
+		kiss_string_copy (buf, kiss_maxlength (kiss_textfont,
+			window2->rect.w - 2 * kiss_vslider.w, label_sel->text,
+			entry->text),label_sel->text, entry->text);
 		kiss_string_copy (label_res->text, KISS_MAX_LABEL,
 			"The following path was selected:\n", buf);
 		window2->visible = 1;

@@ -52,12 +52,10 @@ BIN2 = kiss_example2
 
 all: $(BIN1) $(BIN2)
 
-$(BIN1): kiss_example1.o kiss_widgets.o kiss_draw.o kiss_general.o \
-kiss_posix.o
+$(BIN1): kiss_example1.o kiss_widgets.o kiss_draw.o kiss_general.o
 	$(C) $^ $(LDFLAGS) -o $@
 
-$(BIN2): kiss_example2.o kiss_widgets.o kiss_draw.o kiss_general.o \
-kiss_posix.o
+$(BIN2): kiss_example2.o kiss_widgets.o kiss_draw.o kiss_general.o
 	$(C) $^ $(LDFLAGS) -o $@
 
 kiss_example1.o: kiss_example1.c
@@ -73,9 +71,6 @@ kiss_draw.o: kiss_draw.c
 	$(C) $(CFLAGS) $^ -o $@
 
 kiss_general.o: kiss_general.c
-	$(C) $(CFLAGS) $^ -o $@
-
-kiss_posix.o: kiss_posix.c
 	$(C) $(CFLAGS) $^ -o $@
 
 clean:

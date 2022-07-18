@@ -57,37 +57,16 @@
 #define KISS_MAX_LABEL  500
 #define KISS_MAGIC      12345
 
-enum { OTHER_TYPE,
+enum {
+	OTHER_TYPE,
 	WINDOW_TYPE,
 	RENDERER_TYPE,
 	TEXTURE_TYPE,
 	SURFACE_TYPE,
 	FONT_TYPE,
 	STRING_TYPE,
-	ARRAY_TYPE };
-
-#ifdef _MSC_VER
-#ifdef _WIN32
-typedef struct _stat32 kiss_stat;
-#else
-typedef struct _stat64 kiss_stat;
-#endif
-
-typedef struct kiss_dirent {
-	char *d_name;
-} kiss_dirent;
-
-typedef struct kiss_dir {
-	ptrdiff_t fhandle;
-	struct _finddata_t fdata;
-	kiss_dirent ent;
-	char name[KISS_MAX_LENGTH];
-} kiss_dir;
-#else
-typedef struct stat kiss_stat;
-typedef struct dirent kiss_dirent;
-typedef DIR kiss_dir;
-#endif
+	ARRAY_TYPE
+};
 
 /* Length is number of elements, size is allocated size */
 typedef struct kiss_array {
@@ -280,14 +259,6 @@ extern int kiss_screen_width, kiss_screen_height;
 extern "C" {
 #endif
 
-char *kiss_getcwd (char *buf, int size);
-int kiss_chdir (char *path);
-int kiss_getstat (char *pathname, kiss_stat *buf);
-kiss_dir *kiss_opendir (char *name);
-kiss_dirent *kiss_readdir (kiss_dir *dirp);
-int kiss_closedir (kiss_dir *dirp);
-int kiss_isdir (kiss_stat s);
-int kiss_isreg (kiss_stat s);
 int kiss_makerect (SDL_Rect *rect, int x, int y, int h, int w);
 int kiss_pointinrect (int x, int y, SDL_Rect *rect);
 int kiss_utf8next (char *str, int index);
