@@ -26,7 +26,7 @@
 #include <r_types.h>
 #include <stdio.h>
 
-int kiss_makerect (SDL_Rect *rect, int x, int y, int w, int h) {
+int rk_makerect (SDL_Rect *rect, int x, int y, int w, int h) {
 	if (!rect) {
 		return -1;
 	}
@@ -37,12 +37,12 @@ int kiss_makerect (SDL_Rect *rect, int x, int y, int w, int h) {
 	return 0;
 }
 
-int kiss_pointinrect (int x, int y, SDL_Rect *rect) {
+int rk_pointinrect (int x, int y, SDL_Rect *rect) {
 	return x >= rect->x && x < rect->x + rect->w &&
 		y >= rect->y && y < rect->y + rect->h;
 }
 
-int kiss_utf8next (char *str, int index) {
+int rk_utf8next (char *str, int index) {
 	int i;
 
 	if (!str || index < 0) {
@@ -62,7 +62,7 @@ int kiss_utf8next (char *str, int index) {
 	return i;
 }
 
-int kiss_utf8prev (char *str, int index) {
+int rk_utf8prev (char *str, int index) {
 	int i;
 
 	if (!str || index < 0) {
@@ -82,7 +82,7 @@ int kiss_utf8prev (char *str, int index) {
 	return i;
 }
 
-int kiss_utf8fix (char *str) {
+int rk_utf8fix (char *str) {
 	int len, i;
 
 	if (!str || !str[0]) {
@@ -103,7 +103,7 @@ int kiss_utf8fix (char *str) {
 	return 0;
 }
 
-char *kiss_string_copy (char *dest, size_t size, char *str1, char *str2) {
+char *rk_string_copy (char *dest, size_t size, char *str1, char *str2) {
 	if (!dest) {
 		return NULL;
 	}
@@ -117,15 +117,15 @@ char *kiss_string_copy (char *dest, size_t size, char *str1, char *str2) {
 		strncpy (dest, (char *)((size_t)str1 | (size_t)str2), size - 1);
 		dest[size - 1] = '\x00';
 	}
-	kiss_utf8fix (dest);
+	rk_utf8fix (dest);
 	return dest;
 }
 
-int kiss_string_compare (const void *a, const void *b) {
+int rk_string_compare (const void *a, const void *b) {
 	return strcmp (*((char **)a), *((char **)b));
 }
 
-char *kiss_backspace (char *str) {
+char *rk_backspace (char *str) {
 	int len;
 
 	if (!str) {
@@ -135,11 +135,11 @@ char *kiss_backspace (char *str) {
 		return NULL;
 	}
 	str[len - 1] = 0;
-	kiss_utf8fix (str);
+	rk_utf8fix (str);
 	return str;
 }
 
-int kiss_array_new (kiss_array *a) {
+int rk_array_new (kiss_array *a) {
 	if (!a) {
 		return -1;
 	}
@@ -151,21 +151,21 @@ int kiss_array_new (kiss_array *a) {
 	return 0;
 }
 
-void *kiss_array_data (kiss_array *a, int index) {
+void *rk_array_data (kiss_array *a, int index) {
 	if (index < 0 || index >= a->size || !a) {
 		return NULL;
 	}
 	return a->data[index];
 }
 
-int kiss_array_id (kiss_array *a, int index) {
+int rk_array_id (kiss_array *a, int index) {
 	if (!a || index < 0 || index >= a->size) {
 		return 0;
 	}
 	return a->id[index];
 }
 
-int kiss_array_assign (kiss_array *a, int index, int id, void *data) {
+int rk_array_assign (kiss_array *a, int index, int id, void *data) {
 	if (!a || index < 0 || index >= a->length) {
 		return -1;
 	}
@@ -175,7 +175,7 @@ int kiss_array_assign (kiss_array *a, int index, int id, void *data) {
 	return 0;
 }
 
-int kiss_array_append (kiss_array *a, int id, void *data) {
+int rk_array_append (kiss_array *a, int id, void *data) {
 	int i;
 
 	if (!a) {
@@ -197,17 +197,17 @@ int kiss_array_append (kiss_array *a, int id, void *data) {
 	return 0;
 }
 
-int kiss_array_appendstring (kiss_array *a, int id, char *text1, char *text2) {
+int rk_array_appendstring (kiss_array *a, int id, char *text1, char *text2) {
 	if (!a) {
 		return -1;
 	}
 	char *p = (char *)malloc (KISS_MAX_LENGTH);
-	kiss_string_copy (p, KISS_MAX_LENGTH, text1, text2);
-	kiss_array_append (a, id, p);
+	rk_string_copy (p, KISS_MAX_LENGTH, text1, text2);
+	rk_array_append (a, id, p);
 	return 0;
 }
 
-int kiss_array_insert (kiss_array *a, int index, int id, void *data) {
+int rk_array_insert (kiss_array *a, int index, int id, void *data) {
 	int i;
 
 	if (!a || index < 0 || index >= a->length) {
@@ -233,7 +233,7 @@ int kiss_array_insert (kiss_array *a, int index, int id, void *data) {
 	return 0;
 }
 
-int kiss_array_remove (kiss_array *a, int index) {
+int rk_array_remove (kiss_array *a, int index) {
 	int i;
 
 	if (!a || index < 0 || index >= a->length) {
@@ -250,7 +250,7 @@ int kiss_array_remove (kiss_array *a, int index) {
 	return 0;
 }
 
-int kiss_array_free (kiss_array *a) {
+int rk_array_free (kiss_array *a) {
 	int i;
 
 	if (!a || !a->ref) {

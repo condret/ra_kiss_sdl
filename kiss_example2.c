@@ -63,12 +63,12 @@ static struct {
 
 static void select1_event(kiss_selectbutton *select1, SDL_Event *e,
 	kiss_selectbutton *select2, int *draw) {
-	select2->selected ^= !!kiss_selectbutton_event (select1, e, draw);
+	select2->selected ^= !!rk_selectbutton_event (select1, e, draw);
 }
 
 static void select2_event(kiss_selectbutton *select2, SDL_Event *e,
 	kiss_selectbutton *select1, int *draw) {
-	select1->selected ^= !!kiss_selectbutton_event (select2, e, draw);
+	select1->selected ^= !!rk_selectbutton_event (select2, e, draw);
 }
 
 static void combobox_event(kiss_combobox *combobox, SDL_Event *e,
@@ -78,10 +78,10 @@ static void combobox_event(kiss_combobox *combobox, SDL_Event *e,
 	int i;
 
 	s = combobox->entry.text;
-	if (kiss_combobox_event (combobox, e, draw)) {
+	if (rk_combobox_event (combobox, e, draw)) {
 		if ((p = (void **)bsearch (&s, combobox->textbox.array->data,
 			     combobox->textbox.array->length, sizeof (void *),
-			     kiss_string_compare))) {
+			     rk_string_compare))) {
 			i = p - combobox->textbox.array->data;
 			if (select1->selected) {
 				sprintf (stext, "The population of the "
@@ -114,7 +114,7 @@ static void hscrollbar_event(kiss_hscrollbar *hscrollbar, SDL_Event *e,
 	char *stext, int *first, kiss_entry *entry, int *draw) {
 	char *p = stext;
 
-	if (kiss_hscrollbar_event (hscrollbar, e, draw) && strlen (stext) - entry->textwidth / kiss_textfont.advance > 0) {
+	if (rk_hscrollbar_event (hscrollbar, e, draw) && strlen (stext) - entry->textwidth / kiss_textfont.advance > 0) {
 		*first = (int)((strlen (stext) - entry->textwidth / kiss_textfont.advance) * hscrollbar->fraction + 0.5);
 		if (*first >= 0) {
 			strcpy (entry->text, p + *first);
@@ -126,7 +126,7 @@ static void hscrollbar_event(kiss_hscrollbar *hscrollbar, SDL_Event *e,
 
 static void button_ok_event(kiss_button *button_ok, SDL_Event *e,
 	int *quit, int *draw) {
-	*quit = !!kiss_button_event (button_ok, e, draw);
+	*quit = !!rk_button_event (button_ok, e, draw);
 }
 
 int main (int argc, char **argv) {
@@ -147,39 +147,39 @@ int main (int argc, char **argv) {
 	int combobox_height = 66;
 	int entry_width = 250;
 	kiss_array objects;
-	SDL_Renderer *renderer = kiss_init ("kiss_sdl example 2", &objects, 640, 480);
+	SDL_Renderer *renderer = rk_init ("kiss_sdl example 2", &objects, 640, 480);
 	if (!renderer) {
 		return 1;
 	}
 	kiss_array a;
-	kiss_array_new (&a);
+	rk_array_new (&a);
 	int i;
 	for (i = 0; cities[i].population; i++) {
-		kiss_array_appendstring (&a, 0, cities[i].name, NULL);
+		rk_array_appendstring (&a, 0, cities[i].name, NULL);
 	}
-	kiss_array_append (&objects, ARRAY_TYPE, &a);
+	rk_array_append (&objects, ARRAY_TYPE, &a);
 
 	/* Arrange the widgets nicely relative to each other */
 	kiss_window window;
-	kiss_window_init (&window, NULL, 1, 0, 0, kiss_screen_width, kiss_screen_height);
-	kiss_label_init (&label1, &window, "Population",
+	rk_window_init (&window, NULL, 1, 0, 0, kiss_screen_width, kiss_screen_height);
+	rk_label_init (&label1, &window, "Population",
 		kiss_screen_width / 2 - (combobox_width + kiss_up.w - kiss_edge) / 2 + kiss_edge,
 		6 * kiss_textfont.lineheight);
-	kiss_selectbutton_init (&select1, &window,
+	rk_selectbutton_init (&select1, &window,
 		label1.rect.x + combobox_width + kiss_up.w - kiss_edge - kiss_selected.w,
 		label1.rect.y + kiss_textfont.ascent - kiss_selected.h);
-	kiss_label_init (&label2, &window, "Area", label1.rect.x,
+	rk_label_init (&label2, &window, "Area", label1.rect.x,
 		label1.rect.y + 2 * kiss_textfont.lineheight);
-	kiss_selectbutton_init (&select2, &window, select1.rect.x,
+	rk_selectbutton_init (&select2, &window, select1.rect.x,
 		label2.rect.y + kiss_textfont.ascent - kiss_selected.h);
-	kiss_combobox_init (&combobox, &window, "none", &a,
+	rk_combobox_init (&combobox, &window, "none", &a,
 		label1.rect.x - kiss_edge, label2.rect.y + 2 * kiss_textfont.lineheight,
 		combobox_width, combobox_height);
-	kiss_entry_init (&entry, &window, 1, "", kiss_screen_width / 2 - entry_width / 2 + kiss_edge,
+	rk_entry_init (&entry, &window, 1, "", kiss_screen_width / 2 - entry_width / 2 + kiss_edge,
 		combobox.entry.rect.y + combobox.entry.rect.h + 2 * kiss_textfont.lineheight + kiss_border,
 		entry_width);
-	kiss_hscrollbar_init (&hscrollbar, &window, entry.rect.x, entry.rect.y + entry.rect.h, entry.rect.w);
-	kiss_button_init (&button_ok, &window, "OK", entry.rect.x + entry.rect.w - kiss_edge - kiss_normal.w,
+	rk_hscrollbar_init (&hscrollbar, &window, entry.rect.x, entry.rect.y + entry.rect.h, entry.rect.w);
+	rk_button_init (&button_ok, &window, "OK", entry.rect.x + entry.rect.w - kiss_edge - kiss_normal.w,
 		entry.rect.y + entry.rect.h + kiss_left.h + 2 * kiss_normal.h);
 
 	select1.selected = 1;
@@ -198,7 +198,7 @@ int main (int argc, char **argv) {
 				quit = 1;
 			}
 
-			kiss_window_event (&window, &e, &draw);
+			rk_window_event (&window, &e, &draw);
 			select1_event (&select1, &e, &select2, &draw);
 			select2_event (&select2, &e, &select1, &draw);
 			combobox_event (&combobox, &e, stext, &entry,
@@ -208,7 +208,7 @@ int main (int argc, char **argv) {
 			button_ok_event (&button_ok, &e, &quit, &draw);
 		}
 
-		kiss_combobox_event (&combobox, NULL, &draw);
+		rk_combobox_event (&combobox, NULL, &draw);
 		hscrollbar_event (&hscrollbar, NULL, stext, &first, &entry,
 			&draw);
 
@@ -217,19 +217,19 @@ int main (int argc, char **argv) {
 		}
 		SDL_RenderClear (renderer);
 
-		kiss_window_draw (&window, renderer);
-		kiss_button_draw (&button_ok, renderer);
-		kiss_hscrollbar_draw (&hscrollbar, renderer);
-		kiss_entry_draw (&entry, renderer);
-		kiss_combobox_draw (&combobox, renderer);
-		kiss_selectbutton_draw (&select2, renderer);
-		kiss_label_draw (&label2, renderer);
-		kiss_selectbutton_draw (&select1, renderer);
-		kiss_label_draw (&label1, renderer);
+		rk_window_draw (&window, renderer);
+		rk_button_draw (&button_ok, renderer);
+		rk_hscrollbar_draw (&hscrollbar, renderer);
+		rk_entry_draw (&entry, renderer);
+		rk_combobox_draw (&combobox, renderer);
+		rk_selectbutton_draw (&select2, renderer);
+		rk_label_draw (&label2, renderer);
+		rk_selectbutton_draw (&select1, renderer);
+		rk_label_draw (&label1, renderer);
 
 		SDL_RenderPresent (renderer);
 		draw = 0;
 	}
-	kiss_clean (&objects);
+	rk_clean (&objects);
 	return 0;
 }
