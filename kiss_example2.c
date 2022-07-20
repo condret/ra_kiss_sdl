@@ -152,7 +152,7 @@ int main (int argc, char **argv) {
 		return 1;
 	}
 	kiss_array a;
-	rk_array_new (&a);
+	rk_array_init (&a);
 	int i;
 	for (i = 0; cities[i].population; i++) {
 		rk_array_appendstring (&a, 0, cities[i].name, NULL);

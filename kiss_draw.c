@@ -204,7 +204,7 @@ SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h) {
 	kiss_screen_height = h;
 	IMG_Init (IMG_INIT_PNG);
 	TTF_Init ();
-	rk_array_new (a);
+	rk_array_init (a);
 	window = SDL_CreateWindow (title, srect.w / 2 - w / 2,
 		srect.h / 2 - h / 2, w, h, SDL_WINDOW_SHOWN);
 	if (window) {

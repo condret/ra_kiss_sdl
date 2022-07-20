@@ -139,7 +139,7 @@ char *rk_backspace (char *str) {
 	return str;
 }
 
-int rk_array_new (kiss_array *a) {
+int rk_array_init (kiss_array *a) {
 	if (!a) {
 		return -1;
 	}

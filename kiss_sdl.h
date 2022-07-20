@@ -256,7 +256,7 @@ int rk_utf8fix (char *str);
 char *rk_string_copy (char *dest, size_t size, char *str1, char *str2);
 int rk_string_compare (const void *a, const void *b);
 char *rk_backspace (char *str);
-int rk_array_new (kiss_array *a);
+int rk_array_init (kiss_array *a);
 void *rk_array_data (kiss_array *a, int index);
 int rk_array_id (kiss_array *a, int index);
 int rk_array_assign (kiss_array *a, int index, int id, void *data);

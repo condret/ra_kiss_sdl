@@ -43,8 +43,8 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
 
 	rk_array_free (textbox1->array);
 	rk_array_free (textbox2->array);
-	rk_array_new (textbox1->array);
-	rk_array_new (textbox2->array);
+	rk_array_init (textbox1->array);
+	rk_array_init (textbox2->array);
 	char *dir_path = r_sys_getdir ();
 	if (!dir_path) {
 		return;
@@ -208,9 +208,9 @@ int main (int argc, char **argv) {
 	if (!renderer) {
 		return 1;
 	}
-	rk_array_new (&a1);
+	rk_array_init (&a1);
 	rk_array_append (&objects, ARRAY_TYPE, &a1);
-	rk_array_new (&a2);
+	rk_array_init (&a2);
 	rk_array_append (&objects, ARRAY_TYPE, &a2);
 
 	/* Arrange the widgets nicely relative to each other */
