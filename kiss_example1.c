@@ -39,7 +39,7 @@ static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar) {
 
 /* Read directory entries into the textboxes */
 static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
-	kiss_textbox *textbox2, kiss_vscrollbar *vscrollbar2, kiss_label *label_sel) {
+	kiss_textbox *textbox2, kiss_vscrollbar *vscrollbar2, RKLabel *label_sel) {
 
 	rk_array_free (textbox1->array);
 	rk_array_free (textbox2->array);
@@ -87,7 +87,7 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
 /* The widget arguments are widgets that this widget talks with */
 static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 	kiss_vscrollbar *vscrollbar1, kiss_textbox *textbox2,
-	kiss_vscrollbar *vscrollbar2, kiss_label *label_sel, int *draw) {
+	kiss_vscrollbar *vscrollbar2, RKLabel *label_sel, int *draw) {
 
 	if (rk_textbox_event (textbox, e, draw)) {
 		int index = textbox->firstline + textbox->selectedline;
@@ -145,8 +145,8 @@ static void vscrollbar2_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
 }
 
 static void button_ok1_event(kiss_button *button, SDL_Event *e,
-	kiss_window *window1, kiss_window *window2, kiss_label *label_sel,
-	kiss_entry *entry, kiss_label *label_res,
+	kiss_window *window1, kiss_window *window2, RKLabel *label_sel,
+	kiss_entry *entry, RKLabel *label_res,
 	kiss_progressbar *progressbar, int *draw) {
 	char buf[KISS_MAX_LENGTH];
 
@@ -189,7 +189,7 @@ static void button_ok2_event(kiss_button *button, SDL_Event *e,
 int main (int argc, char **argv) {
 	kiss_array a1, a2;
 	kiss_window window1, window2;
-	kiss_label label1 = { 0 }, label2 = { 0 }, label_sel = { 0 },
+	RKLabel label1 = { 0 }, label2 = { 0 }, label_sel = { 0 },
 		   label_res = { 0 };
 	kiss_button button_ok1 = { 0 }, button_ok2 = { 0 }, button_cancel = { 0 };
 	kiss_textbox textbox1 = { 0 }, textbox2 = { 0 };

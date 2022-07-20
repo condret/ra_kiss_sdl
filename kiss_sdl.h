@@ -91,14 +91,14 @@ typedef struct kiss_window {
 	struct kiss_window *wdw;
 } kiss_window;
 
-typedef struct kiss_label {
+typedef struct rk_label_t {
 	int visible;
 	SDL_Rect rect;
 	char text[KISS_MAX_LABEL];
 	SDL_Color textcolor;
 	RKFont font;
 	kiss_window *wdw;
-} kiss_label;
+} RKLabel;
 
 typedef struct kiss_button {
 	int visible;
@@ -281,9 +281,9 @@ int rk_clean (kiss_array *a);
 int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, int y, int w, int h);
 int rk_window_event (kiss_window *window, SDL_Event *event, int *draw);
 int rk_window_draw (kiss_window *window, SDL_Renderer *renderer);
-int rk_label_init (kiss_label *label, kiss_window *wdw, char *text, int x, int y);
-kiss_label *rk_label_new (kiss_window *wdw, char *text, int x, int y);
-int rk_label_draw (kiss_label *label, SDL_Renderer *renderer);
+int rk_label_init (RKLabel *label, kiss_window *wdw, char *text, int x, int y);
+RKLabel *rk_label_new (kiss_window *wdw, char *text, int x, int y);
+int rk_label_draw (RKLabel *label, SDL_Renderer *renderer);
 int rk_button_init (kiss_button *button, kiss_window *wdw, char *text, int x, int y);
 int rk_button_event (kiss_button *button, SDL_Event *event, int *draw);
 int rk_button_draw (kiss_button *button, SDL_Renderer *renderer);

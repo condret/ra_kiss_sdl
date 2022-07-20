@@ -63,7 +63,7 @@ int rk_window_draw (kiss_window *window, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_label_init (kiss_label *label, kiss_window *wdw, char *text, int x, int y) {
+int rk_label_init (RKLabel *label, kiss_window *wdw, char *text, int x, int y) {
 	if (!label || !text) {
 		return -1;
 	}
@@ -78,11 +78,11 @@ int rk_label_init (kiss_label *label, kiss_window *wdw, char *text, int x, int y
 	return 0;
 }
 
-kiss_label *rk_label_new (kiss_window *wdw, char *text, int x, int y) {
+RKLabel *rk_label_new (kiss_window *wdw, char *text, int x, int y) {
 	if (!text) {
 		return NULL;
 	}
-	kiss_label *label = R_NEW0(kiss_label);
+	RKLabel *label = R_NEW0(RKLabel);
 	if (!label) {
 		return NULL;
 	}
@@ -90,7 +90,7 @@ kiss_label *rk_label_new (kiss_window *wdw, char *text, int x, int y) {
 	return label;
 }
 
-int rk_label_draw (kiss_label *label, SDL_Renderer *renderer) {
+int rk_label_draw (RKLabel *label, SDL_Renderer *renderer) {
 	char buf[KISS_MAX_LABEL], *p;
 
 	if (label && label->wdw) {

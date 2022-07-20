@@ -130,7 +130,7 @@ static void button_ok_event(kiss_button *button_ok, SDL_Event *e,
 }
 
 int main (int argc, char **argv) {
-	kiss_label label1 = { 0 }, label2 = { 0 };
+	RKLabel label1 = { 0 }, label2 = { 0 };
 	kiss_button button_ok = { 0 };
 	kiss_hscrollbar hscrollbar = { 0 };
 	kiss_entry entry = { 0 };
