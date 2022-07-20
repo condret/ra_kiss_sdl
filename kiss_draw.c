@@ -174,7 +174,7 @@ RKImage *rk_image_new (char *fname, SDL_Renderer *renderer) {
 	return img;
 }
 
-int rk_font_init (RKFont *font, char *fname, kiss_array *a, int size) {
+int rk_font_init (RKFont *font, char *fname, int size) {
 	char buf[KISS_MAX_LENGTH];
 
 	if (!font || !fname) {
@@ -185,15 +185,11 @@ int rk_font_init (RKFont *font, char *fname, kiss_array *a, int size) {
 		fprintf (stderr, "Cannot load font %s\n", fname);
 		return -1;
 	}
-	if (a) {
-		rk_array_append (a, FONT_TYPE, font->font);
-	}
 	font->fontheight = TTF_FontHeight (font->font);
 	font->spacing = (int)kiss_spacing * font->fontheight;
 	font->lineheight = font->fontheight + font->spacing;
 	font->ascent = TTF_FontAscent (font->font);
-	TTF_GlyphMetrics (font->font, 'W', NULL, NULL, NULL, NULL,
-		&(font->advance));
+	TTF_GlyphMetrics (font->font, 'W', NULL, NULL, NULL, NULL, &(font->advance));
 	font->magic = KISS_MAGIC;
 	return 0;
 }
@@ -206,7 +202,7 @@ RKFont *rk_font_new (char *fname, int size) {
 	if (!font) {
 		return NULL;
 	}
-	if (rk_font_init (font, fname, NULL, size)) {
+	if (rk_font_init (font, fname, size)) {
 		R_FREE (font);
 	}
 	return font;
@@ -232,13 +228,17 @@ SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h) {
 	if (window) {
 		rk_array_append (a, WINDOW_TYPE, window);
 	}
-	renderer = SDL_CreateRenderer (window, -1,
-		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer (window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer) {
 		rk_array_append (a, RENDERER_TYPE, renderer);
 	}
-	r += rk_font_init (&kiss_textfont, "kiss_font.ttf", a, kiss_textfont_size);
-	r += rk_font_init (&kiss_buttonfont, "kiss_font.ttf", a, kiss_buttonfont_size);
+	if (rk_font_init (&kiss_textfont, "kiss_font.ttf", kiss_textfont_size)) {
+		goto beach;
+	}
+	if (rk_font_init (&kiss_buttonfont, "kiss_font.ttf", kiss_buttonfont_size)) {
+		TTF_CloseFont (kiss_textfont.font);
+		return NULL;
+	}
 	r += rk_image_init (&kiss_normal, "kiss_normal.png", a, renderer);
 	r += rk_image_init (&kiss_prelight, "kiss_prelight.png", a, renderer);
 	r += rk_image_init (&kiss_active, "kiss_active.png", a, renderer);
@@ -253,24 +253,26 @@ SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h) {
 	r += rk_image_init (&kiss_selected, "kiss_selected.png", a, renderer);
 	r += rk_image_init (&kiss_unselected, "kiss_unselected.png", a, renderer);
 	if (r) {
+		TTF_CloseFont (kiss_textfont.font);
+		TTF_CloseFont (kiss_buttonfont.font);
+beach:
 		rk_clean (a);
+		TTF_Quit ();
+		IMG_Quit ();
+		SDL_Quit ();
 		return NULL;
 	}
 	return renderer;
 }
 
 int rk_clean (kiss_array *a) {
-	int i;
-
 	if (!a) {
 		return -1;
 	}
 	if (a->length) {
+		int i;
 		for (i = a->length - 1; i >= 0; i--) {
 			switch (rk_array_id (a, i)) {
-			case FONT_TYPE:
-				TTF_CloseFont ((TTF_Font *)rk_array_data (a, i));
-				break;
 			case TEXTURE_TYPE:
 				SDL_DestroyTexture ((SDL_Texture *)rk_array_data (a, i));
 				break;
@@ -287,8 +289,14 @@ int rk_clean (kiss_array *a) {
 	}
 	a->length = 0;
 	rk_array_free (a);
+	return 0;
+}
+
+void rk_fini (kiss_array *a) {
+	TTF_CloseFont (kiss_textfont.font);
+	TTF_CloseFont (kiss_buttonfont.font);
+	rk_clean (a);
 	TTF_Quit ();
 	IMG_Quit ();
 	SDL_Quit ();
-	return 0;
 }

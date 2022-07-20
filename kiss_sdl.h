@@ -52,7 +52,6 @@ enum {
 	WINDOW_TYPE,
 	RENDERER_TYPE,
 	TEXTURE_TYPE,
-	FONT_TYPE,
 };
 
 /* Length is number of elements, size is allocated size */
@@ -271,10 +270,11 @@ int rk_fillrect (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color);
 int rk_decorate (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color, int edge);
 int rk_image_init (RKImage *image, char *fname, kiss_array *a, SDL_Renderer *renderer);
 RKImage *rk_image_new (char *fname, SDL_Renderer *renderer);
-int rk_font_init (RKFont *font, char *fname, kiss_array *a, int size);
+int rk_font_init (RKFont *font, char *fname, int size);
 RKFont *rk_font_new (char *fname, int size);
 SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h);
 int rk_clean (kiss_array *a);
+void rk_fini (kiss_array *a);
 int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, int y, int w, int h);
 int rk_window_event (kiss_window *window, SDL_Event *event, int *draw);
 int rk_window_draw (kiss_window *window, SDL_Renderer *renderer);

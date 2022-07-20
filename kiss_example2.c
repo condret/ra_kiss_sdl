@@ -23,6 +23,7 @@
 */
 
 #include "kiss_sdl.h"
+#include <r_util.h>
 
 static struct {
 	char name[KISS_MAX_LENGTH];
@@ -61,13 +62,11 @@ static struct {
 	{ "", 0, 0 }
 };
 
-static void select1_event(kiss_selectbutton *select1, SDL_Event *e,
-	kiss_selectbutton *select2, int *draw) {
+static void select1_event(kiss_selectbutton *select1, SDL_Event *e, kiss_selectbutton *select2, int *draw) {
 	select2->selected ^= !!rk_selectbutton_event (select1, e, draw);
 }
 
-static void select2_event(kiss_selectbutton *select2, SDL_Event *e,
-	kiss_selectbutton *select1, int *draw) {
+static void select2_event(kiss_selectbutton *select2, SDL_Event *e, kiss_selectbutton *select1, int *draw) {
 	select1->selected ^= !!rk_selectbutton_event (select2, e, draw);
 }
 
@@ -120,8 +119,7 @@ static void hscrollbar_event(kiss_hscrollbar *hscrollbar, SDL_Event *e,
 	}
 }
 
-static void button_ok_event(kiss_button *button_ok, SDL_Event *e,
-	int *quit, int *draw) {
+static void button_ok_event(kiss_button *button_ok, SDL_Event *e, int *quit, int *draw) {
 	*quit = !!rk_button_event (button_ok, e, draw);
 }
 
@@ -195,16 +193,13 @@ int main (int argc, char **argv) {
 			rk_window_event (&window, &e, &draw);
 			select1_event (&select1, &e, &select2, &draw);
 			select2_event (&select2, &e, &select1, &draw);
-			combobox_event (&combobox, &e, stext, &entry,
-				&select1, &select2, &hscrollbar, &draw);
-			hscrollbar_event (&hscrollbar, &e, stext, &first,
-				&entry, &draw);
+			combobox_event (&combobox, &e, stext, &entry, &select1, &select2, &hscrollbar, &draw);
+			hscrollbar_event (&hscrollbar, &e, stext, &first, &entry, &draw);
 			button_ok_event (&button_ok, &e, &quit, &draw);
 		}
 
 		rk_combobox_event (&combobox, NULL, &draw);
-		hscrollbar_event (&hscrollbar, NULL, stext, &first, &entry,
-			&draw);
+		hscrollbar_event (&hscrollbar, NULL, stext, &first, &entry, &draw);
 
 		if (!draw) {
 			continue;
@@ -224,7 +219,7 @@ int main (int argc, char **argv) {
 		SDL_RenderPresent (renderer);
 		draw = 0;
 	}
-	rk_clean (&objects);
+	rk_fini (&objects);
 	r_pvector_free (names);
 	return 0;
 }

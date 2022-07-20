@@ -295,7 +295,7 @@ int main (int argc, char **argv) {
 		SDL_RenderPresent (renderer);
 		draw = 0;
 	}
-	rk_clean (&objects);
+	rk_fini (&objects);
 	r_pvector_free (l1);
 	r_pvector_free (l2);
 	return 0;
