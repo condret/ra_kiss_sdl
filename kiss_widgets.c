@@ -24,8 +24,7 @@
 
 #include "kiss_sdl.h"
 
-int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate,
-	int x, int y, int w, int h) {
+int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, int y, int w, int h) {
 	if (!window) {
 		return -1;
 	}
@@ -77,6 +76,18 @@ int rk_label_init (kiss_label *label, kiss_window *wdw, char *text, int x, int y
 	label->visible = 0;
 	label->wdw = wdw;
 	return 0;
+}
+
+kiss_label *rk_label_new (kiss_window *wdw, char *text, int x, int y) {
+	if (!text) {
+		return NULL;
+	}
+	kiss_label *label = R_NEW0(kiss_label);
+	if (!label) {
+		return NULL;
+	}
+	rk_label_init (label, wdw, text, x, y);
+	return label;
 }
 
 int rk_label_draw (kiss_label *label, SDL_Renderer *renderer) {

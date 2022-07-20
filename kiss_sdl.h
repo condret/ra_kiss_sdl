@@ -282,6 +282,7 @@ int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, 
 int rk_window_event (kiss_window *window, SDL_Event *event, int *draw);
 int rk_window_draw (kiss_window *window, SDL_Renderer *renderer);
 int rk_label_init (kiss_label *label, kiss_window *wdw, char *text, int x, int y);
+kiss_label *rk_label_new (kiss_window *wdw, char *text, int x, int y);
 int rk_label_draw (kiss_label *label, SDL_Renderer *renderer);
 int rk_button_init (kiss_button *button, kiss_window *wdw, char *text, int x, int y);
 int rk_button_event (kiss_button *button, SDL_Event *event, int *draw);
