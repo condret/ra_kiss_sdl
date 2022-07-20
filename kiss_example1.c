@@ -26,11 +26,10 @@
 #include <r_util.h>
 
 static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar) {
-	qsort (textbox->array->data, textbox->array->length, sizeof (void *),
-		rk_string_compare);
+	r_pvector_sort (textbox->lines, (RPVectorComparator)strcmp);
 	vscrollbar->step = 0.;
-	if (textbox->array->length - textbox->maxlines > 0) {
-		vscrollbar->step = 1. / (textbox->array->length - textbox->maxlines);
+	if (((int)r_pvector_len (textbox->lines)) - textbox->maxlines > 0) {
+		vscrollbar->step = 1. / (((int)r_pvector_len (textbox->lines)) - textbox->maxlines);
 	}
 	textbox->firstline = 0;
 	textbox->highlightline = -1;
@@ -41,10 +40,8 @@ static void text_reset(kiss_textbox *textbox, kiss_vscrollbar *vscrollbar) {
 static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
 	kiss_textbox *textbox2, kiss_vscrollbar *vscrollbar2, RKLabel *label_sel) {
 
-	rk_array_free (textbox1->array);
-	rk_array_free (textbox2->array);
-	rk_array_init (textbox1->array);
-	rk_array_init (textbox2->array);
+	r_pvector_clear (textbox1->lines);
+	r_pvector_clear (textbox2->lines);
 	char *dir_path = r_sys_getdir ();
 	if (!dir_path) {
 		return;
@@ -73,9 +70,9 @@ static void dirent_read(kiss_textbox *textbox1, kiss_vscrollbar *vscrollbar1,
 	while (r_list_length (dir)) {
 		char *file = r_list_pop (dir);
 		if (r_file_is_directory (file)) {
-			rk_array_appendstring (textbox1->array, 0, file, "/");
+			r_pvector_push (textbox1->lines, r_str_newf ("%s/", file));
 		} else if (r_file_is_regular (file)) {
-			rk_array_appendstring (textbox2->array, 0, file, NULL);
+			r_pvector_push (textbox2->lines, strdup (file));
 		}
 		dir->free (file);
 	}
@@ -91,22 +88,21 @@ static void textbox1_event(kiss_textbox *textbox, SDL_Event *e,
 
 	if (rk_textbox_event (textbox, e, draw)) {
 		int index = textbox->firstline + textbox->selectedline;
-		if (strcmp ((char *)rk_array_data (textbox->array, index), "")) {
+		if (strcmp ((char *)r_pvector_at (textbox->lines, index), "")) {
 			textbox->selectedline = -1;
-			r_sys_chdir ((char *)rk_array_data (textbox->array, index));
+			r_sys_chdir ((char *)r_pvector_at (textbox->lines, index));
 			dirent_read (textbox, vscrollbar1, textbox2, vscrollbar2, label_sel);
 			*draw = 1;
 		}
 	}
 }
 
-static void vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
-	kiss_textbox *textbox1, int *draw) {
+static void vscrollbar1_event(kiss_vscrollbar *vscrollbar, SDL_Event *e, kiss_textbox *textbox1, int *draw) {
 	int firstline;
 
 	if (rk_vscrollbar_event (vscrollbar, e, draw) &&
-		textbox1->array->length - textbox1->maxlines > 0) {
-		firstline = (int)((textbox1->array->length -
+		((int)r_pvector_len (textbox1->lines)) - textbox1->maxlines > 0) {
+		firstline = (int)((((int)r_pvector_len (textbox1->lines)) -
 			textbox1->maxlines) * vscrollbar->fraction + 0.5);
 		if (firstline >= 0) {
 			textbox1->firstline = firstline;
@@ -121,21 +117,19 @@ static void textbox2_event(kiss_textbox *textbox, SDL_Event *e,
 
 	if (rk_textbox_event (textbox, e, draw)) {
 		index = textbox->firstline + textbox->selectedline;
-		if (strcmp ((char *)rk_array_data (textbox->array, index), "")) {
+		if (strcmp ((char *)r_pvector_at (textbox->lines, index), "")) {
 			rk_string_copy (entry->text, entry->textwidth / kiss_textfont.advance,
-				(char *)rk_array_data (textbox->array, index), NULL);
+				(char *)r_pvector_at (textbox->lines, index), NULL);
 			*draw = 1;
 		}
 	}
 }
 
-static void vscrollbar2_event(kiss_vscrollbar *vscrollbar, SDL_Event *e,
-	kiss_textbox *textbox2, int *draw) {
+static void vscrollbar2_event(kiss_vscrollbar *vscrollbar, SDL_Event *e, kiss_textbox *textbox2, int *draw) {
 	int firstline;
 
-	if (rk_vscrollbar_event (vscrollbar, e, draw) &&
-		textbox2->array->length) {
-		firstline = (int)((textbox2->array->length -
+	if (rk_vscrollbar_event (vscrollbar, e, draw) && r_pvector_len (textbox2->lines)) {
+		firstline = (int)((((int)r_pvector_len (textbox2->lines)) -
 			textbox2->maxlines) * vscrollbar->fraction + 0.5);
 		if (firstline >= 0) {
 			textbox2->firstline = firstline;
@@ -187,10 +181,8 @@ static void button_ok2_event(kiss_button *button, SDL_Event *e,
 }
 
 int main (int argc, char **argv) {
-	kiss_array a1, a2;
 	kiss_window window1, window2;
-	RKLabel label1 = { 0 }, label2 = { 0 }, label_sel = { 0 },
-		   label_res = { 0 };
+	RKLabel label1 = { 0 }, label2 = { 0 }, label_sel = { 0 }, label_res = { 0 };
 	kiss_button button_ok1 = { 0 }, button_ok2 = { 0 }, button_cancel = { 0 };
 	kiss_textbox textbox1 = { 0 }, textbox2 = { 0 };
 	kiss_vscrollbar vscrollbar1 = { 0 }, vscrollbar2 = { 0 };
@@ -208,19 +200,16 @@ int main (int argc, char **argv) {
 	if (!renderer) {
 		return 1;
 	}
-	rk_array_init (&a1);
-	rk_array_append (&objects, ARRAY_TYPE, &a1);
-	rk_array_init (&a2);
-	rk_array_append (&objects, ARRAY_TYPE, &a2);
 
 	/* Arrange the widgets nicely relative to each other */
 	rk_window_init (&window1, NULL, 1, 0, 0, kiss_screen_width,
 		kiss_screen_height);
-	rk_textbox_init (&textbox1, &window1, 1, &a1, kiss_screen_width / 2 - (2 * textbox_width + 2 * kiss_up.w - kiss_edge) / 2,
+	RPVector *l1 = r_pvector_new (free);
+	rk_textbox_init (&textbox1, &window1, 1, l1, kiss_screen_width / 2 - (2 * textbox_width + 2 * kiss_up.w - kiss_edge) / 2,
 		3 * kiss_normal.h, textbox_width, textbox_height);
 	rk_vscrollbar_init (&vscrollbar1, &window1, NULL, textbox1.rect.x + textbox_width, textbox1.rect.y, textbox_height);
-	rk_textbox_init (&textbox2, &window1, 1, &a2,
-		vscrollbar1.uprect.x + kiss_up.w, textbox1.rect.y,
+	RPVector *l2 = r_pvector_new (free);
+	rk_textbox_init (&textbox2, &window1, 1, l2, vscrollbar1.uprect.x + kiss_up.w, textbox1.rect.y,
 		textbox_width, textbox_height);
 	SDL_Rect scroll_wheel_rect;
 	rk_makerect (&scroll_wheel_rect, textbox2.rect.x, textbox2.rect.y, textbox_width + kiss_down.w, textbox_height);
@@ -307,5 +296,7 @@ int main (int argc, char **argv) {
 		draw = 0;
 	}
 	rk_clean (&objects);
+	r_pvector_free (l1);
+	r_pvector_free (l2);
 	return 0;
 }

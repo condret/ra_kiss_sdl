@@ -74,15 +74,11 @@ static void select2_event(kiss_selectbutton *select2, SDL_Event *e,
 static void combobox_event(kiss_combobox *combobox, SDL_Event *e,
 	char *stext, kiss_entry *entry, kiss_selectbutton *select1,
 	kiss_selectbutton *select2, kiss_hscrollbar *hscrollbar, int *draw) {
-	void **p, *s;
-	int i;
 
-	s = combobox->entry.text;
+	void *s = combobox->entry.text;
 	if (rk_combobox_event (combobox, e, draw)) {
-		if ((p = (void **)bsearch (&s, combobox->textbox.array->data,
-			     combobox->textbox.array->length, sizeof (void *),
-			     rk_string_compare))) {
-			i = p - combobox->textbox.array->data;
+		int i = r_pvector_bsearch(combobox->textbox.lines, s, (RPVectorComparator)strcmp);
+		if (i > -1) {
 			if (select1->selected) {
 				sprintf (stext, "The population of the "
 						"metropolitan area of %s is %d.",
@@ -151,13 +147,11 @@ int main (int argc, char **argv) {
 	if (!renderer) {
 		return 1;
 	}
-	kiss_array a;
-	rk_array_init (&a);
+	RPVector *names	= r_pvector_new (free);
 	int i;
 	for (i = 0; cities[i].population; i++) {
-		rk_array_appendstring (&a, 0, cities[i].name, NULL);
+		r_pvector_push (names, strdup(cities[i].name));
 	}
-	rk_array_append (&objects, ARRAY_TYPE, &a);
 
 	/* Arrange the widgets nicely relative to each other */
 	kiss_window window;
@@ -172,7 +166,7 @@ int main (int argc, char **argv) {
 		label1.rect.y + 2 * kiss_textfont.lineheight);
 	rk_selectbutton_init (&select2, &window, select1.rect.x,
 		label2.rect.y + kiss_textfont.ascent - kiss_selected.h);
-	rk_combobox_init (&combobox, &window, "none", &a,
+	rk_combobox_init (&combobox, &window, "none", names,
 		label1.rect.x - kiss_edge, label2.rect.y + 2 * kiss_textfont.lineheight,
 		combobox_width, combobox_height);
 	rk_entry_init (&entry, &window, 1, "", kiss_screen_width / 2 - entry_width / 2 + kiss_edge,
@@ -231,5 +225,6 @@ int main (int argc, char **argv) {
 		draw = 0;
 	}
 	rk_clean (&objects);
+	r_pvector_free (names);
 	return 0;
 }

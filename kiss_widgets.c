@@ -716,8 +716,8 @@ int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer) {
 }
 
 int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate,
-	kiss_array *a, int x, int y, int w, int h) {
-	if (!textbox || !a) {
+	RPVector *lines, int x, int y, int w, int h) {
+	if (!textbox || !lines) {
 		return -1;
 	}
 	if (textbox->font.magic != KISS_MAGIC) {
@@ -733,7 +733,7 @@ int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate,
 	rk_makerect (&textbox->textrect, x + kiss_border,
 		y + kiss_border, w - 2 * kiss_border, h - 2 * kiss_border);
 	textbox->decorate = decorate;
-	textbox->array = a;
+	textbox->lines = lines;
 	textbox->firstline = 0;
 	textbox->maxlines = (h - 2 * kiss_border) / textbox->font.lineheight;
 	textbox->textwidth = w - 2 * kiss_border;
@@ -747,8 +747,8 @@ int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate,
 
 static int textbox_numoflines(kiss_textbox *textbox) {
 	int numoflines = textbox->maxlines;
-	if (textbox->array->length - textbox->firstline < textbox->maxlines) {
-		numoflines = textbox->array->length - textbox->firstline;
+	if (((int)r_pvector_len (textbox->lines)) - textbox->firstline < textbox->maxlines) {
+		numoflines = ((int)r_pvector_len (textbox->lines)) - textbox->firstline;
 	}
 	return numoflines;
 }
@@ -756,7 +756,7 @@ static int textbox_numoflines(kiss_textbox *textbox) {
 int rk_textbox_event (kiss_textbox *textbox, SDL_Event *event, int *draw) {
 	int texty, textmaxy, numoflines;
 
-	if (!textbox || !textbox->visible || !event || !textbox->array || !textbox->array->length) {
+	if (!textbox || !textbox->visible || !event || !textbox->lines || !r_pvector_len (textbox->lines)) {
 		return 0;
 	}
 	if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_EXPOSED) {
@@ -813,14 +813,14 @@ int rk_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer) {
 			textbox->textrect.w, textbox->font.lineheight);
 		rk_fillrect (renderer, &highlightrect, textbox->hlcolor);
 	}
-	if (!textbox->array || !textbox->array->length) {
+	if (!textbox->lines || !r_pvector_len (textbox->lines)) {
 		return 0;
 	}
 	numoflines = textbox_numoflines (textbox);
 	for (i = 0; i < numoflines; i++) {
 		rk_string_copy (buf, rk_maxlength (textbox->font, textbox->textwidth,
-			(char *)rk_array_data (textbox->array, textbox->firstline + i), NULL),
-			(char *)rk_array_data (textbox->array, textbox->firstline + i), NULL);
+			(char *)r_pvector_at (textbox->lines, textbox->firstline + i), NULL),
+			(char *)r_pvector_at (textbox->lines, textbox->firstline + i), NULL);
 		rk_rendertext (renderer, buf, textbox->textrect.x,
 			textbox->textrect.y + i * textbox->font.lineheight + textbox->font.spacing / 2,
 			textbox->font, textbox->textcolor);
@@ -829,7 +829,7 @@ int rk_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer) {
 }
 
 int rk_combobox_init (kiss_combobox *combobox, kiss_window *wdw,
-	char *text, kiss_array *a, int x, int y, int w, int h) {
+	char *text, RPVector *a, int x, int y, int w, int h) {
 	if (!combobox || !a || !text) {
 		return -1;
 	}
@@ -851,9 +851,9 @@ int rk_combobox_init (kiss_combobox *combobox, kiss_window *wdw,
 	combobox->visible = 0;
 	combobox->wdw = wdw;
 	combobox->vscrollbar.step = 0.;
-	if (combobox->textbox.array->length - combobox->textbox.maxlines > 0) {
+	if (((int)r_pvector_len (combobox->textbox.lines)) - combobox->textbox.maxlines > 0) {
 		combobox->vscrollbar.step = 1. /
-			(combobox->textbox.array->length - combobox->textbox.maxlines);
+			(((int)r_pvector_len (combobox->textbox.lines)) - combobox->textbox.maxlines);
 	}
 	return 0;
 }
@@ -865,13 +865,13 @@ int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event, int *draw) {
 		return 0;
 	}
 	if (rk_vscrollbar_event (&combobox->vscrollbar, event, draw) &&
-		combobox->textbox.array->length - combobox->textbox.maxlines >= 0) {
+		((int)r_pvector_len (combobox->textbox.lines)) - combobox->textbox.maxlines >= 0) {
 		combobox->vscrollbar.step = 0.;
-		if (combobox->textbox.array->length - combobox->textbox.maxlines > 0) {
+		if (((int)r_pvector_len (combobox->textbox.lines)) - combobox->textbox.maxlines > 0) {
 			combobox->vscrollbar.step = 1. /
-				(combobox->textbox.array->length - combobox->textbox.maxlines);
+				(((int)r_pvector_len (combobox->textbox.lines)) - combobox->textbox.maxlines);
 		}
-		firstline = (int)((combobox->textbox.array->length -
+		firstline = (int)(((int)r_pvector_len (combobox->textbox.lines) -
 			combobox->textbox.maxlines) * combobox->vscrollbar.fraction + 0.5);
 		if (firstline >= 0) {
 			combobox->textbox.firstline = firstline;
@@ -903,8 +903,8 @@ int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event, int *draw) {
 		index = combobox->textbox.firstline + combobox->textbox.selectedline;
 		rk_string_copy (combobox->entry.text,
 			rk_maxlength (combobox->textbox.font, combobox->entry.textwidth,
-				(char *)rk_array_data (combobox->textbox.array, index),NULL),
-			(char *)rk_array_data (combobox->textbox.array, index), NULL);
+				(char *)r_pvector_at (combobox->textbox.lines, index), NULL),
+			(char *)r_pvector_at (combobox->textbox.lines, index), NULL);
 		*draw = 1;
 		SDL_StopTextInput ();
 		return 1;

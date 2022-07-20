@@ -204,7 +204,7 @@ typedef struct kiss_textbox {
 	int focus;
 	SDL_Rect rect;
 	int decorate;
-	kiss_array *array;
+	RPVector *lines;
 	SDL_Rect textrect;
 	int firstline;
 	int maxlines;
@@ -302,10 +302,10 @@ int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer);
 int rk_entry_init (kiss_entry *entry, kiss_window *wdw, int decorate, char *text, int x, int y, int w);
 int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw);
 int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer);
-int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate, kiss_array *a, int x, int y, int w, int h);
+int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
 int rk_textbox_event (kiss_textbox *textbox, SDL_Event *event, int *draw);
 int rk_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer);
-int rk_combobox_init (kiss_combobox *combobox, kiss_window *wdw, char *text, kiss_array *a, int x, int y, int w, int h);
+int rk_combobox_init (kiss_combobox *combobox, kiss_window *wdw, char *text, RPVector *a, int x, int y, int w, int h);
 int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event,int *draw);
 int rk_combobox_draw (kiss_combobox *combobox, SDL_Renderer *renderer);
 
