@@ -246,12 +246,11 @@ extern int kiss_screen_width, kiss_screen_height;
 extern "C" {
 #endif
 
-#define rk_pointinrect(x, y, rect) \
-	(x >= ((rect)->x) && x < ((rect)->x) + ((rect)->w) && \
-	 y >= ((rect)->y) && y < ((rect)->y) + ((rect)->h))
+#define rk_pointinrect(_x, _y, rect)					\
+	((_x) >= ((rect)->x) && (_x) < ((rect)->x) + ((rect)->w) &&	\
+	(_y) >= ((rect)->y) && (_y) < ((rect)->y) + ((rect)->h))	\
 
 int rk_makerect (SDL_Rect *rect, int x, int y, int h, int w);
-//int rk_pointinrect (int x, int y, SDL_Rect *rect);
 int rk_utf8next (char *str, int index);
 int rk_utf8prev (char *str, int index);
 int rk_utf8fix (char *str);
