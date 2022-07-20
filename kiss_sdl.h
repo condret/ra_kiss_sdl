@@ -65,14 +65,14 @@ typedef struct kiss_array {
 	int ref;
 } kiss_array;
 
-typedef struct kiss_image {
+typedef struct rk_image_t {
 	SDL_Texture *image;
 	int magic;
 	int w;
 	int h;
-} kiss_image;
+} RKImage;
 
-typedef struct kiss_font {
+typedef struct rk_font_t {
 	TTF_Font *font;
 	int magic;
 	int fontheight;
@@ -80,7 +80,7 @@ typedef struct kiss_font {
 	int lineheight;
 	int advance;
 	int ascent;
-} kiss_font;
+} RKFont;
 
 typedef struct kiss_window {
 	int visible;
@@ -96,7 +96,7 @@ typedef struct kiss_label {
 	SDL_Rect rect;
 	char text[KISS_MAX_LABEL];
 	SDL_Color textcolor;
-	kiss_font font;
+	RKFont font;
 	kiss_window *wdw;
 } kiss_label;
 
@@ -110,10 +110,10 @@ typedef struct kiss_button {
 	int active;
 	int prelight;
 	SDL_Color textcolor;
-	kiss_font font;
-	kiss_image normalimg;
-	kiss_image activeimg;
-	kiss_image prelightimg;
+	RKFont font;
+	RKImage normalimg;
+	RKImage activeimg;
+	RKImage prelightimg;
 	kiss_window *wdw;
 } kiss_button;
 
@@ -122,8 +122,8 @@ typedef struct kiss_selectbutton {
 	int focus;
 	SDL_Rect rect;
 	int selected;
-	kiss_image selectedimg;
-	kiss_image unselectedimg;
+	RKImage selectedimg;
+	RKImage unselectedimg;
 	kiss_window *wdw;
 } kiss_selectbutton;
 
@@ -141,9 +141,9 @@ typedef struct kiss_vscrollbar {
 	int downclicked;
 	int upclicked;
 	int sliderclicked;
-	kiss_image up;
-	kiss_image down;
-	kiss_image vslider;
+	RKImage up;
+	RKImage down;
+	RKImage vslider;
 	kiss_window *wdw;
 } kiss_vscrollbar;
 
@@ -160,9 +160,9 @@ typedef struct kiss_hscrollbar {
 	int leftclicked;
 	int rightclicked;
 	int sliderclicked;
-	kiss_image left;
-	kiss_image right;
-	kiss_image hslider;
+	RKImage left;
+	RKImage right;
+	RKImage hslider;
 	kiss_window *wdw;
 } kiss_hscrollbar;
 
@@ -176,7 +176,7 @@ typedef struct kiss_progressbar {
 	SDL_Color bg;
 	ut32 lasttick;
 	int run;
-	kiss_image bar;
+	RKImage bar;
 	kiss_window *wdw;
 } kiss_progressbar;
 
@@ -195,7 +195,7 @@ typedef struct kiss_entry {
 	SDL_Color normalcolor;
 	SDL_Color activecolor;
 	SDL_Color bg;
-	kiss_font font;
+	RKFont font;
 	kiss_window *wdw;
 } kiss_entry;
 
@@ -216,7 +216,7 @@ typedef struct kiss_textbox {
 	SDL_Color textcolor;
 	SDL_Color hlcolor;
 	SDL_Color bg;
-	kiss_font font;
+	RKFont font;
 	kiss_window *wdw;
 } kiss_textbox;
 
@@ -227,14 +227,14 @@ typedef struct kiss_combobox {
 	kiss_window window;
 	kiss_vscrollbar vscrollbar;
 	kiss_textbox textbox;
-	kiss_image combo;
+	RKImage combo;
 	kiss_window *wdw;
 } kiss_combobox;
 
 extern SDL_Color kiss_white, kiss_black, kiss_green, kiss_blue,
 	kiss_lightblue;
-extern kiss_font kiss_textfont, kiss_buttonfont;
-extern kiss_image kiss_normal, kiss_prelight, kiss_active, kiss_bar,
+extern RKFont kiss_textfont, kiss_buttonfont;
+extern RKImage kiss_normal, kiss_prelight, kiss_active, kiss_bar,
 	kiss_up, kiss_down, kiss_left, kiss_right, kiss_vslider,
 	kiss_hslider, kiss_selected, kiss_unselected, kiss_combo;
 extern double kiss_spacing;
@@ -266,16 +266,16 @@ int rk_array_insert (kiss_array *a, int index, int id, void *data);
 int rk_array_remove (kiss_array *a, int index);
 int rk_array_free (kiss_array *a);
 ut32 rk_getticks (void);
-int rk_maxlength (kiss_font font, int width, char *str1, char *str2);
-int rk_textwidth (kiss_font font, char *str1, char *str2);
-int rk_renderimage (SDL_Renderer *renderer, kiss_image image, int x, int y, SDL_Rect *clip);
-int rk_rendertext (SDL_Renderer *renderer, char *text, int x, int y, kiss_font font, SDL_Color color);
+int rk_maxlength (RKFont font, int width, char *str1, char *str2);
+int rk_textwidth (RKFont font, char *str1, char *str2);
+int rk_renderimage (SDL_Renderer *renderer, RKImage image, int x, int y, SDL_Rect *clip);
+int rk_rendertext (SDL_Renderer *renderer, char *text, int x, int y, RKFont font, SDL_Color color);
 int rk_fillrect (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color);
 int rk_decorate (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color, int edge);
-int rk_image_init (kiss_image *image, char *fname, kiss_array *a, SDL_Renderer *renderer);
-kiss_image *rk_image_new (char *fname, SDL_Renderer *renderer);
-int rk_font_init (kiss_font *font, char *fname, kiss_array *a, int size);
-kiss_font *rk_font_new (char *fname, int size);
+int rk_image_init (RKImage *image, char *fname, kiss_array *a, SDL_Renderer *renderer);
+RKImage *rk_image_new (char *fname, SDL_Renderer *renderer);
+int rk_font_init (RKFont *font, char *fname, kiss_array *a, int size);
+RKFont *rk_font_new (char *fname, int size);
 SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h);
 int rk_clean (kiss_array *a);
 int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, int y, int w, int h);
