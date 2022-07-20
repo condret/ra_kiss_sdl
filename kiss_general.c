@@ -121,10 +121,6 @@ char *rk_string_copy (char *dest, size_t size, char *str1, char *str2) {
 	return dest;
 }
 
-int rk_string_compare (const void *a, const void *b) {
-	return strcmp (*((char **)a), *((char **)b));
-}
-
 char *rk_backspace (char *str) {
 	int len;
 
@@ -194,16 +190,6 @@ int rk_array_append (kiss_array *a, int id, void *data) {
 	a->data[a->length] = data;
 	a->id[a->length] = id;
 	++a->length;
-	return 0;
-}
-
-int rk_array_appendstring (kiss_array *a, int id, char *text1, char *text2) {
-	if (!a) {
-		return -1;
-	}
-	char *p = (char *)malloc (KISS_MAX_LENGTH);
-	rk_string_copy (p, KISS_MAX_LENGTH, text1, text2);
-	rk_array_append (a, id, p);
 	return 0;
 }
 
