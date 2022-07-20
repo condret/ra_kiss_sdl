@@ -26,9 +26,9 @@
 #include <r_types.h>
 
 kiss_font kiss_textfont, kiss_buttonfont;
-kiss_image kiss_normal, kiss_prelight, kiss_active, kiss_bar,
-	kiss_up, kiss_down, kiss_left, kiss_right, kiss_vslider,
-	kiss_hslider, kiss_selected, kiss_unselected, kiss_combo;
+kiss_image kiss_normal, kiss_prelight, kiss_active, kiss_bar;
+kiss_image kiss_up, kiss_down, kiss_left, kiss_right, kiss_vslider;
+kiss_image kiss_hslider, kiss_selected, kiss_unselected, kiss_combo;
 int kiss_screen_width, kiss_screen_height;
 int kiss_textfont_size = 15;
 int kiss_buttonfont_size = 12;
@@ -80,8 +80,7 @@ int rk_textwidth (kiss_font font, char *str1, char *str2) {
 	return width;
 }
 
-int rk_renderimage (SDL_Renderer *renderer, kiss_image image,
-	int x, int y, SDL_Rect *clip) {
+int rk_renderimage (SDL_Renderer *renderer, kiss_image image, int x, int y, SDL_Rect *clip) {
 	SDL_Rect dst;
 
 	if (!renderer || !image.image) {
@@ -96,8 +95,7 @@ int rk_renderimage (SDL_Renderer *renderer, kiss_image image,
 	return 0;
 }
 
-int rk_rendertext (SDL_Renderer *renderer, char *text, int x, int y,
-	kiss_font font, SDL_Color color) {
+int rk_rendertext (SDL_Renderer *renderer, char *text, int x, int y, kiss_font font, SDL_Color color) {
 	SDL_Surface *surface;
 	kiss_image image;
 
@@ -143,8 +141,7 @@ int rk_decorate (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color,
 	return 0;
 }
 
-int rk_image_init (kiss_image *image, char *fname, kiss_array *a,
-	SDL_Renderer *renderer) {
+int rk_image_init (kiss_image *image, char *fname, kiss_array *a, SDL_Renderer *renderer) {
 	char buf[KISS_MAX_LENGTH];
 
 	if (!image || !fname) {
@@ -161,6 +158,20 @@ int rk_image_init (kiss_image *image, char *fname, kiss_array *a,
 	SDL_QueryTexture (image->image, NULL, NULL, &image->w, &image->h);
 	image->magic = KISS_MAGIC;
 	return 0;
+}
+
+kiss_image *rk_image_new (char *fname, SDL_Renderer *renderer) {
+	if (!fname || !renderer) {
+		return NULL;
+	}
+	kiss_image *img = R_NEW0 (kiss_image);
+	if (!img) {
+		return NULL;
+	}
+	if (!rk_image_init (img, fname, NULL, renderer)) {
+		R_FREE (img);
+	}
+	return img;
 }
 
 int rk_font_init (kiss_font *font, char *fname, kiss_array *a, int size) {
@@ -187,13 +198,25 @@ int rk_font_init (kiss_font *font, char *fname, kiss_array *a, int size) {
 	return 0;
 }
 
+kiss_font *rk_font_new (char *fname, int size) {
+	if (!fname) {
+		return NULL;
+	}
+	kiss_font *font = R_NEW0 (kiss_font);
+	if (!font) {
+		return NULL;
+	}
+	if (rk_font_init (font, fname, NULL, size)) {
+		R_FREE (font);
+	}
+	return font;
+}
+
 SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h) {
-	SDL_Window *window;
 	SDL_Renderer *renderer;
 	SDL_Rect srect;
-	int r;
+	int r = 0;
 
-	r = 0;
 	SDL_Init (SDL_INIT_EVERYTHING);
 	SDL_GetDisplayBounds (0, &srect);
 	if (!a || w > srect.w || h > srect.h) {
@@ -205,8 +228,7 @@ SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h) {
 	IMG_Init (IMG_INIT_PNG);
 	TTF_Init ();
 	rk_array_init (a);
-	window = SDL_CreateWindow (title, srect.w / 2 - w / 2,
-		srect.h / 2 - h / 2, w, h, SDL_WINDOW_SHOWN);
+	SDL_Window *window = SDL_CreateWindow (title, srect.w / 2 - w / 2, srect.h / 2 - h / 2, w, h, SDL_WINDOW_SHOWN);
 	if (window) {
 		rk_array_append (a, WINDOW_TYPE, window);
 	}

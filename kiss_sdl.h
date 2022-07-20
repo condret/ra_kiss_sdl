@@ -273,7 +273,9 @@ int rk_rendertext (SDL_Renderer *renderer, char *text, int x, int y, kiss_font f
 int rk_fillrect (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color);
 int rk_decorate (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color, int edge);
 int rk_image_init (kiss_image *image, char *fname, kiss_array *a, SDL_Renderer *renderer);
+kiss_image *rk_image_new (char *fname, SDL_Renderer *renderer);
 int rk_font_init (kiss_font *font, char *fname, kiss_array *a, int size);
+kiss_font *rk_font_new (char *fname, int size);
 SDL_Renderer *rk_init (char *title, kiss_array *a, int w, int h);
 int rk_clean (kiss_array *a);
 int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, int y, int w, int h);
