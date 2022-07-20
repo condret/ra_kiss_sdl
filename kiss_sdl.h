@@ -53,7 +53,6 @@ enum {
 	RENDERER_TYPE,
 	TEXTURE_TYPE,
 	FONT_TYPE,
-	ARRAY_TYPE
 };
 
 /* Length is number of elements, size is allocated size */

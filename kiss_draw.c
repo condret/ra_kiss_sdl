@@ -280,9 +280,6 @@ int rk_clean (kiss_array *a) {
 			case WINDOW_TYPE:
 				SDL_DestroyWindow ((SDL_Window *)rk_array_data (a, i));
 				break;
-			case ARRAY_TYPE:
-				rk_array_free ((kiss_array *)rk_array_data (a, i));
-				break;
 			default:
 				free (a->data[i]);
 			}
