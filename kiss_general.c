@@ -37,10 +37,10 @@ int rk_makerect (SDL_Rect *rect, int x, int y, int w, int h) {
 	return 0;
 }
 
-int rk_pointinrect (int x, int y, SDL_Rect *rect) {
-	return x >= rect->x && x < rect->x + rect->w &&
-		y >= rect->y && y < rect->y + rect->h;
-}
+//int rk_pointinrect (int x, int y, SDL_Rect *rect) {
+//	return x >= rect->x && x < rect->x + rect->w &&
+//		y >= rect->y && y < rect->y + rect->h;
+//}
 
 int rk_utf8next (char *str, int index) {
 	int i;
