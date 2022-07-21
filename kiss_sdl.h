@@ -250,7 +250,11 @@ extern "C" {
 	((_x) >= ((rect)->x) && (_x) < ((rect)->x) + ((rect)->w) &&	\
 	(_y) >= ((rect)->y) && (_y) < ((rect)->y) + ((rect)->h))	\
 
-int rk_makerect (SDL_Rect *rect, int x, int y, int h, int w);
+#define rk_makerect(rect, _x, _y, w, h)					\
+	((rect) ? (((rect).x) = (_x)) (((rect).y) = _y)		\
+	(((rect).w) = w) (((rect).h) = h) (0) : (-1))
+
+
 int rk_utf8next (char *str, int index);
 int rk_utf8prev (char *str, int index);
 int rk_utf8fix (char *str);
