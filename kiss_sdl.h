@@ -250,9 +250,13 @@ extern "C" {
 	((_x) >= ((rect)->x) && (_x) < ((rect)->x) + ((rect)->w) &&	\
 	(_y) >= ((rect)->y) && (_y) < ((rect)->y) + ((rect)->h))	\
 
-#define rk_makerect(rect, _x, _y, w, h)					\
-	((rect) ? (((rect).x) = (_x)) (((rect).y) = _y)		\
-	(((rect).w) = w) (((rect).h) = h) (0) : (-1))
+#define rk_makerect(rect, _x, _y, _w, _h)	\
+	do {					\
+		(rect).x = (_x);		\
+		(rect).y = (_y);		\
+		(rect).w = (_w);		\
+		(rect).h = (_h);		\
+	} while(0)
 
 
 int rk_utf8next (char *str, int index);
