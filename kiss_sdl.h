@@ -125,7 +125,7 @@ typedef struct rk_select_button_t {
 	kiss_window *wdw;
 } RKSelectButton;
 
-typedef struct kiss_vscrollbar {
+typedef struct rk_vertical_scrollbar_t {
 	int visible;
 	int focus;
 	SDL_Rect uprect;
@@ -143,7 +143,7 @@ typedef struct kiss_vscrollbar {
 	RKImage down;
 	RKImage vslider;
 	kiss_window *wdw;
-} kiss_vscrollbar;
+} RKVScrollbar;
 
 typedef struct kiss_hscrollbar {
 	int visible;
@@ -223,7 +223,7 @@ typedef struct kiss_combobox {
 	char text[KISS_MAX_LENGTH];
 	kiss_entry entry;
 	kiss_window window;
-	kiss_vscrollbar vscrollbar;
+	RKVScrollbar vscrollbar;
 	kiss_textbox textbox;
 	RKImage combo;
 	kiss_window *wdw;
@@ -292,9 +292,10 @@ int rk_selectbutton_init (RKSelectButton *selectbutton, kiss_window *wdw, int x,
 RKSelectButton *rk_selectbutton_new (kiss_window *wdw, int x, int y);
 int rk_selectbutton_event (RKSelectButton *selectbutton, SDL_Event *event, int *draw);
 int rk_selectbutton_draw (RKSelectButton *selectbutton, SDL_Renderer *renderer);
-int rk_vscrollbar_init (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h);
-int rk_vscrollbar_event (kiss_vscrollbar *vscrollbar, SDL_Event *event,int *draw);
-int rk_vscrollbar_draw (kiss_vscrollbar *vscrollbar, SDL_Renderer *renderer);
+int rk_vscrollbar_init (RKVScrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h);
+RKVScrollbar *rk_vscrollbar_new (kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h);
+int rk_vscrollbar_event (RKVScrollbar *vscrollbar, SDL_Event *event,int *draw);
+int rk_vscrollbar_draw (RKVScrollbar *vscrollbar, SDL_Renderer *renderer);
 int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, kiss_window *wdw, int x, int y, int w);
 int rk_hscrollbar_event (kiss_hscrollbar *hscrollbar, SDL_Event *event, int *draw);
 int rk_hscrollbar_draw (kiss_hscrollbar *hscrollbar, SDL_Renderer *renderer);

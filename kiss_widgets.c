@@ -283,7 +283,7 @@ int rk_selectbutton_draw (RKSelectButton *selectbutton, SDL_Renderer *renderer) 
 	return 1;
 }
 
-int rk_vscrollbar_init (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
+int rk_vscrollbar_init (RKVScrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
 	if (!vscrollbar) {
 		return -1;
 	}
@@ -322,7 +322,17 @@ int rk_vscrollbar_init (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect 
 	return 0;
 }
 
-static void vnewpos(kiss_vscrollbar *vscrollbar, double step, int *draw) {
+RKVScrollbar *rk_vscrollbar_new (kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
+	RKVScrollbar *vsb = R_NEW0 (RKVScrollbar);
+	if (vsb) {
+		if (rk_vscrollbar_init (vsb, wdw, wheelrect, x, y, h)) {
+			R_FREE (vsb);
+		}
+	}
+	return vsb;
+}
+
+static void vnewpos(RKVScrollbar *vscrollbar, double step, int *draw) {
 	*draw = 1;
 	vscrollbar->fraction += step;
 	vscrollbar->lasttick = rk_getticks ();
@@ -341,7 +351,7 @@ static void vnewpos(kiss_vscrollbar *vscrollbar, double step, int *draw) {
 	vscrollbar->downclicked = 0;
 }
 
-int rk_vscrollbar_event (kiss_vscrollbar *vscrollbar, SDL_Event *event, int *draw) {
+int rk_vscrollbar_event (RKVScrollbar *vscrollbar, SDL_Event *event, int *draw) {
 	if (!vscrollbar || !vscrollbar->visible) {
 		return 0;
 	}
@@ -424,7 +434,7 @@ int rk_vscrollbar_event (kiss_vscrollbar *vscrollbar, SDL_Event *event, int *dra
 	return 0;
 }
 
-int rk_vscrollbar_draw (kiss_vscrollbar *vscrollbar, SDL_Renderer *renderer) {
+int rk_vscrollbar_draw (RKVScrollbar *vscrollbar, SDL_Renderer *renderer) {
 	if (vscrollbar && vscrollbar->wdw) {
 		vscrollbar->visible = vscrollbar->wdw->visible;
 	}
