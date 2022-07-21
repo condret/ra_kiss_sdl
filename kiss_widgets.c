@@ -29,7 +29,7 @@ int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, 
 		return -1;
 	}
 	window->bg = kiss_white;
-	rk_makerect (&window->rect, x, y, w, h);
+	rk_makerect (window->rect, x, y, w, h);
 	window->decorate = decorate;
 	window->visible = 0;
 	window->focus = 1;
@@ -71,7 +71,7 @@ int rk_label_init (RKLabel *label, kiss_window *wdw, char *text, int x, int y) {
 		label->font = kiss_textfont;
 	}
 	label->textcolor = kiss_black;
-	rk_makerect (&label->rect, x, y, 0, 0);
+	rk_makerect (label->rect, x, y, 0, 0);
 	rk_string_copy (label->text, KISS_MAX_LABEL, text, NULL);
 	label->visible = 0;
 	label->wdw = wdw;
@@ -131,7 +131,7 @@ int rk_button_init (RKButton *button, kiss_window *wdw, char *text, int x, int y
 	if (button->prelightimg.magic != KISS_MAGIC) {
 		button->prelightimg = kiss_prelight;
 	}
-	rk_makerect (&button->rect, x, y, button->normalimg.w, button->normalimg.h);
+	rk_makerect (button->rect, x, y, button->normalimg.w, button->normalimg.h);
 	button->textcolor = kiss_white;
 	rk_string_copy (button->text, KISS_MAX_LENGTH, text, NULL);
 	button->textx = x + button->normalimg.w / 2 -
@@ -228,7 +228,7 @@ int rk_selectbutton_init (RKSelectButton *selectbutton, kiss_window *wdw, int x,
 	if (selectbutton->unselectedimg.magic != KISS_MAGIC) {
 		selectbutton->unselectedimg = kiss_unselected;
 	}
-	rk_makerect (&selectbutton->rect, x, y,
+	rk_makerect (selectbutton->rect, x, y,
 		selectbutton->selectedimg.w, selectbutton->selectedimg.h);
 	selectbutton->selected = 0;
 	selectbutton->focus = 0;
@@ -300,12 +300,12 @@ int rk_vscrollbar_init (RKVScrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wh
 		2 * kiss_slider_padding + vscrollbar->vslider.h > h) {
 		return -1;
 	}
-	rk_makerect (&vscrollbar->uprect, x, y + kiss_edge,
+	rk_makerect (vscrollbar->uprect, x, y + kiss_edge,
 		vscrollbar->up.w, vscrollbar->up.h + kiss_slider_padding);
-	rk_makerect (&vscrollbar->downrect, x,
+	rk_makerect (vscrollbar->downrect, x,
 		y + h - vscrollbar->down.h - kiss_slider_padding - kiss_edge,
 		vscrollbar->down.w, vscrollbar->down.h + kiss_slider_padding);
-	rk_makerect (&vscrollbar->sliderrect, x, y + vscrollbar->uprect.h + kiss_edge,
+	rk_makerect (vscrollbar->sliderrect, x, y + vscrollbar->uprect.h + kiss_edge,
 		vscrollbar->vslider.w, vscrollbar->vslider.h);
 	vscrollbar->wheelrect = wheelrect;
 	vscrollbar->maxpos = h - 2 * kiss_slider_padding - 2 * kiss_edge -
@@ -468,11 +468,11 @@ int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, kiss_window *wdw, int x, in
 		2 * kiss_slider_padding + hscrollbar->hslider.w > w) {
 		return -1;
 	}
-	rk_makerect (&hscrollbar->leftrect, x + kiss_edge, y,
+	rk_makerect (hscrollbar->leftrect, x + kiss_edge, y,
 		hscrollbar->left.w + kiss_slider_padding, hscrollbar->left.h);
-	rk_makerect (&hscrollbar->rightrect, x + w - hscrollbar->right.w - kiss_slider_padding - kiss_edge,
+	rk_makerect (hscrollbar->rightrect, x + w - hscrollbar->right.w - kiss_slider_padding - kiss_edge,
 		y, hscrollbar->right.w + kiss_slider_padding, hscrollbar->right.h);
-	rk_makerect (&hscrollbar->sliderrect, x + hscrollbar->leftrect.w + kiss_edge,
+	rk_makerect (hscrollbar->sliderrect, x + hscrollbar->leftrect.w + kiss_edge,
 		y, hscrollbar->hslider.w, hscrollbar->hslider.h);
 	hscrollbar->maxpos = w - 2 * kiss_slider_padding - 2 * kiss_edge -
 		hscrollbar->left.w - hscrollbar->right.w - hscrollbar->hslider.w;
@@ -603,9 +603,9 @@ int rk_progressbar_init (kiss_progressbar *progressbar, kiss_window *wdw, int x,
 		progressbar->bar = kiss_bar;
 	}
 	progressbar->bg = kiss_white;
-	rk_makerect (&progressbar->rect, x, y, w,
+	rk_makerect (progressbar->rect, x, y, w,
 		progressbar->bar.h + 2 * kiss_border);
-	rk_makerect (&progressbar->barrect, x + kiss_border,
+	rk_makerect (progressbar->barrect, x + kiss_border,
 		y + kiss_border, 0, progressbar->bar.h);
 	progressbar->width = w - 2 * kiss_border;
 	progressbar->fraction = 0.;
@@ -645,7 +645,7 @@ int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer) 
 	rk_fillrect (renderer, &progressbar->rect, progressbar->bg);
 	rk_decorate (renderer, &progressbar->rect, kiss_blue, kiss_edge);
 	progressbar->barrect.w = (int)(progressbar->width * progressbar->fraction + 0.5);
-	rk_makerect (&clip, 0, 0, progressbar->barrect.w, progressbar->barrect.h);
+	rk_makerect (clip, 0, 0, progressbar->barrect.w, progressbar->barrect.h);
 	rk_renderimage (renderer, progressbar->bar, progressbar->barrect.x,
 		progressbar->barrect.y, &clip);
 	return 1;
@@ -666,7 +666,7 @@ int rk_entry_init (kiss_entry *entry, kiss_window *wdw, int decorate, char *text
 	entry->activecolor = kiss_blue;
 	entry->textwidth = w - 2 * kiss_border;
 	rk_string_copy (entry->text, rk_maxlength (entry->font, entry->textwidth, text, NULL), text, NULL);
-	rk_makerect (&entry->rect, x, y, w, entry->font.fontheight + 2 * kiss_border);
+	rk_makerect (entry->rect, x, y, w, entry->font.fontheight + 2 * kiss_border);
 	entry->decorate = decorate;
 	entry->textx = x + kiss_border;
 	entry->texty = y + kiss_border;
@@ -766,8 +766,8 @@ int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate,
 	textbox->bg = kiss_white;
 	textbox->textcolor = kiss_black;
 	textbox->hlcolor = kiss_lightblue;
-	rk_makerect (&textbox->rect, x, y, w, h);
-	rk_makerect (&textbox->textrect, x + kiss_border,
+	rk_makerect (textbox->rect, x, y, w, h);
+	rk_makerect (textbox->textrect, x + kiss_border,
 		y + kiss_border, w - 2 * kiss_border, h - 2 * kiss_border);
 	textbox->decorate = decorate;
 	textbox->lines = lines;
@@ -845,7 +845,7 @@ int rk_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer) {
 		rk_decorate (renderer, &textbox->rect, kiss_blue, kiss_edge);
 	}
 	if (textbox->highlightline >= 0) {
-		rk_makerect (&highlightrect, textbox->textrect.x,
+		rk_makerect (highlightrect, textbox->textrect.x,
 			textbox->textrect.y + textbox->highlightline * textbox->font.lineheight,
 			textbox->textrect.w, textbox->font.lineheight);
 		rk_fillrect (renderer, &highlightrect, textbox->hlcolor);

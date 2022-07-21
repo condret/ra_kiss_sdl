@@ -212,7 +212,7 @@ int main (int argc, char **argv) {
 	rk_textbox_init (&textbox2, &window1, 1, l2, vscrollbar1.uprect.x + kiss_up.w, textbox1.rect.y,
 		textbox_width, textbox_height);
 	SDL_Rect scroll_wheel_rect;
-	rk_makerect (&scroll_wheel_rect, textbox2.rect.x, textbox2.rect.y, textbox_width + kiss_down.w, textbox_height);
+	rk_makerect (scroll_wheel_rect, textbox2.rect.x, textbox2.rect.y, textbox_width + kiss_down.w, textbox_height);
 	rk_vscrollbar_init (&vscrollbar2, &window1, &scroll_wheel_rect,
 		textbox2.rect.x + textbox_width, vscrollbar1.uprect.y, textbox_height);
 	rk_label_init (&label1, &window1, "Folders", textbox1.rect.x + kiss_edge, textbox1.rect.y - kiss_textfont.lineheight);

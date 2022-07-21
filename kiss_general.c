@@ -26,16 +26,6 @@
 #include <r_types.h>
 #include <stdio.h>
 
-int rk_makerect (SDL_Rect *rect, int x, int y, int w, int h) {
-	if (!rect) {
-		return -1;
-	}
-	rect->x = x;
-	rect->y = y;
-	rect->w = w;
-	rect->h = h;
-	return 0;
-}
 
 int rk_utf8next (char *str, int index) {
 	int i;

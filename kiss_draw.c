@@ -86,7 +86,7 @@ int rk_renderimage (SDL_Renderer *renderer, RKImage image, int x, int y, SDL_Rec
 	if (!renderer || !image.image) {
 		return -1;
 	}
-	rk_makerect (&dst, x, y, image.w, image.h);
+	rk_makerect (dst, x, y, image.w, image.h);
 	if (clip) {
 		dst.w = clip->w;
 		dst.h = clip->h;
@@ -133,7 +133,7 @@ int rk_decorate (SDL_Renderer *renderer, SDL_Rect *rect, SDL_Color color,
 	}
 	SDL_SetRenderDrawColor (renderer, color.r, color.g, color.b, color.a);
 	for (i = 0; i < 2; i++) {
-		rk_makerect (&outlinerect, rect->x + edge + i,
+		rk_makerect (outlinerect, rect->x + edge + i,
 			rect->y + edge + i, rect->w - d - i - i,
 			rect->h - d - i - i);
 		SDL_RenderDrawRect (renderer, &outlinerect);
