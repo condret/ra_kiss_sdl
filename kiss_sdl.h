@@ -115,7 +115,7 @@ typedef struct rk_button_t {
 	kiss_window *wdw;
 } RKButton;
 
-typedef struct kiss_selectbutton {
+typedef struct rk_select_button_t {
 	int visible;
 	int focus;
 	SDL_Rect rect;
@@ -123,7 +123,7 @@ typedef struct kiss_selectbutton {
 	RKImage selectedimg;
 	RKImage unselectedimg;
 	kiss_window *wdw;
-} kiss_selectbutton;
+} RKSelectButton;
 
 typedef struct kiss_vscrollbar {
 	int visible;
@@ -288,9 +288,10 @@ int rk_button_init (RKButton *button, kiss_window *wdw, char *text, int x, int y
 RKButton *rk_button_new (kiss_window *wdw, char *text, int x, int y);
 int rk_button_event (RKButton *button, SDL_Event *event, int *draw);
 int rk_button_draw (RKButton *button, SDL_Renderer *renderer);
-int rk_selectbutton_init (kiss_selectbutton *selectbutton, kiss_window *wdw, int x, int y);
-int rk_selectbutton_event (kiss_selectbutton *selectbutton, SDL_Event *event, int *draw);
-int rk_selectbutton_draw (kiss_selectbutton *selectbutton, SDL_Renderer *renderer);
+int rk_selectbutton_init (RKSelectButton *selectbutton, kiss_window *wdw, int x, int y);
+RKSelectButton *rk_selectbutton_new (kiss_window *wdw, int x, int y);
+int rk_selectbutton_event (RKSelectButton *selectbutton, SDL_Event *event, int *draw);
+int rk_selectbutton_draw (RKSelectButton *selectbutton, SDL_Renderer *renderer);
 int rk_vscrollbar_init (kiss_vscrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h);
 int rk_vscrollbar_event (kiss_vscrollbar *vscrollbar, SDL_Event *event,int *draw);
 int rk_vscrollbar_draw (kiss_vscrollbar *vscrollbar, SDL_Renderer *renderer);

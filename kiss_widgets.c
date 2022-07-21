@@ -218,7 +218,7 @@ int rk_button_draw (RKButton *button, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_selectbutton_init (kiss_selectbutton *selectbutton, kiss_window *wdw, int x, int y) {
+int rk_selectbutton_init (RKSelectButton *selectbutton, kiss_window *wdw, int x, int y) {
 	if (!selectbutton) {
 		return -1;
 	}
@@ -236,7 +236,19 @@ int rk_selectbutton_init (kiss_selectbutton *selectbutton, kiss_window *wdw, int
 	return 0;
 }
 
-int rk_selectbutton_event (kiss_selectbutton *selectbutton, SDL_Event *event, int *draw) {
+RKSelectButton *rk_selectbutton_new (kiss_window *wdw, int x, int y) {
+	RKSelectButton *selectbutton = R_NEW0 (RKSelectButton);
+	if (!selectbutton) {
+		return NULL;
+	}
+	if (rk_selectbutton_init (selectbutton, wdw, x, y)) {
+		free (selectbutton);
+		return NULL;
+	}
+	return selectbutton;
+}
+
+int rk_selectbutton_event (RKSelectButton *selectbutton, SDL_Event *event, int *draw) {
 	if (!selectbutton || !selectbutton->visible || !event) {
 		return 0;
 	}
@@ -254,7 +266,7 @@ int rk_selectbutton_event (kiss_selectbutton *selectbutton, SDL_Event *event, in
 	return 0;
 }
 
-int rk_selectbutton_draw (kiss_selectbutton *selectbutton, SDL_Renderer *renderer) {
+int rk_selectbutton_draw (RKSelectButton *selectbutton, SDL_Renderer *renderer) {
 	if (selectbutton && selectbutton->wdw) {
 		selectbutton->visible = selectbutton->wdw->visible;
 	}

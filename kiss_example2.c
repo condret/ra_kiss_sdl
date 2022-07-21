@@ -62,17 +62,17 @@ static struct {
 	{ "", 0, 0 }
 };
 
-static void select1_event(kiss_selectbutton *select1, SDL_Event *e, kiss_selectbutton *select2, int *draw) {
+static void select1_event(RKSelectButton *select1, SDL_Event *e, RKSelectButton *select2, int *draw) {
 	select2->selected ^= !!rk_selectbutton_event (select1, e, draw);
 }
 
-static void select2_event(kiss_selectbutton *select2, SDL_Event *e, kiss_selectbutton *select1, int *draw) {
+static void select2_event(RKSelectButton *select2, SDL_Event *e, RKSelectButton *select1, int *draw) {
 	select1->selected ^= !!rk_selectbutton_event (select2, e, draw);
 }
 
 static void combobox_event(kiss_combobox *combobox, SDL_Event *e,
-	char *stext, kiss_entry *entry, kiss_selectbutton *select1,
-	kiss_selectbutton *select2, kiss_hscrollbar *hscrollbar, int *draw) {
+	char *stext, kiss_entry *entry, RKSelectButton *select1,
+	RKSelectButton *select2, kiss_hscrollbar *hscrollbar, int *draw) {
 
 	void *s = combobox->entry.text;
 	if (rk_combobox_event (combobox, e, draw)) {
@@ -129,7 +129,7 @@ int main (int argc, char **argv) {
 	kiss_hscrollbar hscrollbar = { 0 };
 	kiss_entry entry = { 0 };
 	kiss_combobox combobox = { 0 };
-	kiss_selectbutton select1 = { 0 }, select2 = { 0 };
+	RKSelectButton select1 = { 0 }, select2 = { 0 };
 	char stext[KISS_MAX_LENGTH];
 
 	int quit = 0;
