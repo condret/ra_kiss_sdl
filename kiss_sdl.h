@@ -98,7 +98,7 @@ typedef struct rk_label_t {
 	kiss_window *wdw;
 } RKLabel;
 
-typedef struct kiss_button {
+typedef struct rk_button_t {
 	int visible;
 	int focus;
 	SDL_Rect rect;
@@ -113,7 +113,7 @@ typedef struct kiss_button {
 	RKImage activeimg;
 	RKImage prelightimg;
 	kiss_window *wdw;
-} kiss_button;
+} RKButton;
 
 typedef struct kiss_selectbutton {
 	int visible;
@@ -284,9 +284,10 @@ int rk_window_draw (kiss_window *window, SDL_Renderer *renderer);
 int rk_label_init (RKLabel *label, kiss_window *wdw, char *text, int x, int y);
 RKLabel *rk_label_new (kiss_window *wdw, char *text, int x, int y);
 int rk_label_draw (RKLabel *label, SDL_Renderer *renderer);
-int rk_button_init (kiss_button *button, kiss_window *wdw, char *text, int x, int y);
-int rk_button_event (kiss_button *button, SDL_Event *event, int *draw);
-int rk_button_draw (kiss_button *button, SDL_Renderer *renderer);
+int rk_button_init (RKButton *button, kiss_window *wdw, char *text, int x, int y);
+RKButton *rk_button_new (kiss_window *wdw, char *text, int x, int y);
+int rk_button_event (RKButton *button, SDL_Event *event, int *draw);
+int rk_button_draw (RKButton *button, SDL_Renderer *renderer);
 int rk_selectbutton_init (kiss_selectbutton *selectbutton, kiss_window *wdw, int x, int y);
 int rk_selectbutton_event (kiss_selectbutton *selectbutton, SDL_Event *event, int *draw);
 int rk_selectbutton_draw (kiss_selectbutton *selectbutton, SDL_Renderer *renderer);

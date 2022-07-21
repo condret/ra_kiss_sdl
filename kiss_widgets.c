@@ -115,7 +115,7 @@ int rk_label_draw (RKLabel *label, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_button_init (kiss_button *button, kiss_window *wdw, char *text, int x, int y) {
+int rk_button_init (RKButton *button, kiss_window *wdw, char *text, int x, int y) {
 	if (!button || !text) {
 		return -1;
 	}
@@ -146,7 +146,22 @@ int rk_button_init (kiss_button *button, kiss_window *wdw, char *text, int x, in
 	return 0;
 }
 
-int rk_button_event (kiss_button *button, SDL_Event *event, int *draw) {
+RKButton *rk_button_new(kiss_window *wdw, char *text, int x, int y) {
+	if (!text) {
+		return NULL;
+	}
+	RKButton *button = R_NEW0 (RKButton);
+	if (!button) {
+		return NULL;
+	}
+	if (rk_button_init (button, wdw, text, x, y)) {
+		free (button);
+		return NULL;
+	}
+	return button;
+}
+
+int rk_button_event (RKButton *button, SDL_Event *event, int *draw) {
 	if (!button || !button->visible || !event) {
 		return 0;
 	}
@@ -181,7 +196,7 @@ int rk_button_event (kiss_button *button, SDL_Event *event, int *draw) {
 	return 0;
 }
 
-int rk_button_draw (kiss_button *button, SDL_Renderer *renderer) {
+int rk_button_draw (RKButton *button, SDL_Renderer *renderer) {
 	if (button && button->wdw) {
 		button->visible = button->wdw->visible;
 	}

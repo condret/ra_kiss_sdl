@@ -138,7 +138,7 @@ static void vscrollbar2_event(kiss_vscrollbar *vscrollbar, SDL_Event *e, kiss_te
 	}
 }
 
-static void button_ok1_event(kiss_button *button, SDL_Event *e,
+static void button_ok1_event(RKButton *button, SDL_Event *e,
 	kiss_window *window1, kiss_window *window2, RKLabel *label_sel,
 	kiss_entry *entry, RKLabel *label_res,
 	kiss_progressbar *progressbar, int *draw) {
@@ -160,14 +160,14 @@ static void button_ok1_event(kiss_button *button, SDL_Event *e,
 	}
 }
 
-static void button_cancel_event(kiss_button *button, SDL_Event *e,
+static void button_cancel_event(RKButton *button, SDL_Event *e,
 	int *quit, int *draw) {
 	if (rk_button_event (button, e, draw)) {
 		*quit = 1;
 	}
 }
 
-static void button_ok2_event(kiss_button *button, SDL_Event *e,
+static void button_ok2_event(RKButton *button, SDL_Event *e,
 	kiss_window *window1, kiss_window *window2,
 	kiss_progressbar *progressbar, int *draw) {
 	if (rk_button_event (button, e, draw)) {
@@ -183,7 +183,7 @@ static void button_ok2_event(kiss_button *button, SDL_Event *e,
 int main (int argc, char **argv) {
 	kiss_window window1, window2;
 	RKLabel label1 = { 0 }, label2 = { 0 }, label_sel = { 0 }, label_res = { 0 };
-	kiss_button button_ok1 = { 0 }, button_ok2 = { 0 }, button_cancel = { 0 };
+	RKButton button_ok1 = { 0 }, button_ok2 = { 0 }, button_cancel = { 0 };
 	kiss_textbox textbox1 = { 0 }, textbox2 = { 0 };
 	kiss_vscrollbar vscrollbar1 = { 0 }, vscrollbar2 = { 0 };
 	kiss_progressbar progressbar = { 0 };

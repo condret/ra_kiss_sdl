@@ -119,13 +119,13 @@ static void hscrollbar_event(kiss_hscrollbar *hscrollbar, SDL_Event *e,
 	}
 }
 
-static void button_ok_event(kiss_button *button_ok, SDL_Event *e, int *quit, int *draw) {
+static void button_ok_event(RKButton *button_ok, SDL_Event *e, int *quit, int *draw) {
 	*quit = !!rk_button_event (button_ok, e, draw);
 }
 
 int main (int argc, char **argv) {
 	RKLabel label1 = { 0 }, label2 = { 0 };
-	kiss_button button_ok = { 0 };
+	RKButton button_ok = { 0 };
 	kiss_hscrollbar hscrollbar = { 0 };
 	kiss_entry entry = { 0 };
 	kiss_combobox combobox = { 0 };
