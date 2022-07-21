@@ -152,7 +152,7 @@ int main (int argc, char **argv) {
 	}
 
 	/* Arrange the widgets nicely relative to each other */
-	kiss_window window;
+	RKWindow window;
 	rk_window_init (&window, NULL, 1, 0, 0, kiss_screen_width, kiss_screen_height);
 	rk_label_init (&label1, &window, "Population",
 		kiss_screen_width / 2 - (combobox_width + kiss_up.w - kiss_edge) / 2 + kiss_edge,

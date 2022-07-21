@@ -139,7 +139,7 @@ static void vscrollbar2_event(RKVScrollbar *vscrollbar, SDL_Event *e, kiss_textb
 }
 
 static void button_ok1_event(RKButton *button, SDL_Event *e,
-	kiss_window *window1, kiss_window *window2, RKLabel *label_sel,
+	RKWindow *window1, RKWindow *window2, RKLabel *label_sel,
 	kiss_entry *entry, RKLabel *label_res,
 	kiss_progressbar *progressbar, int *draw) {
 	char buf[KISS_MAX_LENGTH];
@@ -168,7 +168,7 @@ static void button_cancel_event(RKButton *button, SDL_Event *e,
 }
 
 static void button_ok2_event(RKButton *button, SDL_Event *e,
-	kiss_window *window1, kiss_window *window2,
+	RKWindow *window1, RKWindow *window2,
 	kiss_progressbar *progressbar, int *draw) {
 	if (rk_button_event (button, e, draw)) {
 		window2->visible = 0;
@@ -181,7 +181,7 @@ static void button_ok2_event(RKButton *button, SDL_Event *e,
 }
 
 int main (int argc, char **argv) {
-	kiss_window window1, window2;
+	RKWindow window1, window2;
 	RKLabel label1 = { 0 }, label2 = { 0 }, label_sel = { 0 }, label_res = { 0 };
 	RKButton button_ok1 = { 0 }, button_ok2 = { 0 }, button_cancel = { 0 };
 	kiss_textbox textbox1 = { 0 }, textbox2 = { 0 };

@@ -24,7 +24,7 @@
 
 #include "kiss_sdl.h"
 
-int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, int y, int w, int h) {
+int rk_window_init (RKWindow *window, RKWindow *wdw, int decorate, int x, int y, int w, int h) {
 	if (!window) {
 		return -1;
 	}
@@ -37,7 +37,17 @@ int rk_window_init (kiss_window *window, kiss_window *wdw, int decorate, int x, 
 	return 0;
 }
 
-int rk_window_event (kiss_window *window, SDL_Event *event, int *draw) {
+RKWindow *rk_window_new (RKWindow *wdw, int decorate, int x, int y, int w, int h) {
+	RKWindow *window = R_NEW0 (RKWindow);
+	if (window) {
+		if (rk_window_init (window, wdw, decorate, x, y, w, h)) {
+			R_FREE (window);
+		}
+	}
+	return window;
+}
+
+int rk_window_event (RKWindow *window, SDL_Event *event, int *draw) {
 	if (!window || !window->visible || !event) {
 		return 0;
 	}
@@ -49,7 +59,7 @@ int rk_window_event (kiss_window *window, SDL_Event *event, int *draw) {
 		rk_pointinrect (event->button.x, event->button.y, &window->rect));
 }
 
-int rk_window_draw (kiss_window *window, SDL_Renderer *renderer) {
+int rk_window_draw (RKWindow *window, SDL_Renderer *renderer) {
 	if (window && window->wdw) {
 		window->visible = window->wdw->visible;
 	}
@@ -63,7 +73,7 @@ int rk_window_draw (kiss_window *window, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_label_init (RKLabel *label, kiss_window *wdw, char *text, int x, int y) {
+int rk_label_init (RKLabel *label, RKWindow *wdw, char *text, int x, int y) {
 	if (!label || !text) {
 		return -1;
 	}
@@ -78,7 +88,7 @@ int rk_label_init (RKLabel *label, kiss_window *wdw, char *text, int x, int y) {
 	return 0;
 }
 
-RKLabel *rk_label_new (kiss_window *wdw, char *text, int x, int y) {
+RKLabel *rk_label_new (RKWindow *wdw, char *text, int x, int y) {
 	if (!text) {
 		return NULL;
 	}
@@ -115,7 +125,7 @@ int rk_label_draw (RKLabel *label, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_button_init (RKButton *button, kiss_window *wdw, char *text, int x, int y) {
+int rk_button_init (RKButton *button, RKWindow *wdw, char *text, int x, int y) {
 	if (!button || !text) {
 		return -1;
 	}
@@ -146,7 +156,7 @@ int rk_button_init (RKButton *button, kiss_window *wdw, char *text, int x, int y
 	return 0;
 }
 
-RKButton *rk_button_new(kiss_window *wdw, char *text, int x, int y) {
+RKButton *rk_button_new(RKWindow *wdw, char *text, int x, int y) {
 	if (!text) {
 		return NULL;
 	}
@@ -218,7 +228,7 @@ int rk_button_draw (RKButton *button, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_selectbutton_init (RKSelectButton *selectbutton, kiss_window *wdw, int x, int y) {
+int rk_selectbutton_init (RKSelectButton *selectbutton, RKWindow *wdw, int x, int y) {
 	if (!selectbutton) {
 		return -1;
 	}
@@ -236,7 +246,7 @@ int rk_selectbutton_init (RKSelectButton *selectbutton, kiss_window *wdw, int x,
 	return 0;
 }
 
-RKSelectButton *rk_selectbutton_new (kiss_window *wdw, int x, int y) {
+RKSelectButton *rk_selectbutton_new (RKWindow *wdw, int x, int y) {
 	RKSelectButton *selectbutton = R_NEW0 (RKSelectButton);
 	if (!selectbutton) {
 		return NULL;
@@ -283,7 +293,7 @@ int rk_selectbutton_draw (RKSelectButton *selectbutton, SDL_Renderer *renderer) 
 	return 1;
 }
 
-int rk_vscrollbar_init (RKVScrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
+int rk_vscrollbar_init (RKVScrollbar *vscrollbar, RKWindow *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
 	if (!vscrollbar) {
 		return -1;
 	}
@@ -322,7 +332,7 @@ int rk_vscrollbar_init (RKVScrollbar *vscrollbar, kiss_window *wdw, SDL_Rect *wh
 	return 0;
 }
 
-RKVScrollbar *rk_vscrollbar_new (kiss_window *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
+RKVScrollbar *rk_vscrollbar_new (RKWindow *wdw, SDL_Rect *wheelrect, int x, int y, int h) {
 	RKVScrollbar *vsb = R_NEW0 (RKVScrollbar);
 	if (vsb) {
 		if (rk_vscrollbar_init (vsb, wdw, wheelrect, x, y, h)) {
@@ -451,7 +461,7 @@ int rk_vscrollbar_draw (RKVScrollbar *vscrollbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, kiss_window *wdw, int x, int y, int w) {
+int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, RKWindow *wdw, int x, int y, int w) {
 	if (!hscrollbar) {
 		return -1;
 	}
@@ -595,7 +605,7 @@ int rk_hscrollbar_draw (kiss_hscrollbar *hscrollbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_progressbar_init (kiss_progressbar *progressbar, kiss_window *wdw, int x, int y, int w) {
+int rk_progressbar_init (kiss_progressbar *progressbar, RKWindow *wdw, int x, int y, int w) {
 	if (!progressbar || w < 2 * kiss_border + 1) {
 		return -1;
 	}
@@ -651,7 +661,7 @@ int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer) 
 	return 1;
 }
 
-int rk_entry_init (kiss_entry *entry, kiss_window *wdw, int decorate, char *text, int x, int y, int w) {
+int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w) {
 	if (!entry || !text) {
 		return -1;
 	}
@@ -752,7 +762,7 @@ int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_textbox_init (kiss_textbox *textbox, kiss_window *wdw, int decorate,
+int rk_textbox_init (kiss_textbox *textbox, RKWindow *wdw, int decorate,
 	RPVector *lines, int x, int y, int w, int h) {
 	if (!textbox || !lines) {
 		return -1;
@@ -865,7 +875,7 @@ int rk_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_combobox_init (kiss_combobox *combobox, kiss_window *wdw,
+int rk_combobox_init (kiss_combobox *combobox, RKWindow *wdw,
 	char *text, RPVector *a, int x, int y, int w, int h) {
 	if (!combobox || !a || !text) {
 		return -1;
