@@ -218,7 +218,7 @@ typedef struct rk_textbox {
 	RKWindow *wdw;
 } rk_textbox;
 
-typedef struct kiss_combobox {
+typedef struct rk_combobox {
 	int visible;
 	char text[KISS_MAX_LENGTH];
 	kiss_entry entry;
@@ -227,7 +227,7 @@ typedef struct kiss_combobox {
 	rk_textbox textbox;
 	RKImage combo;
 	RKWindow *wdw;
-} kiss_combobox;
+} rk_combobox;
 
 extern SDL_Color kiss_white, kiss_black, kiss_green, kiss_blue,
 	kiss_lightblue;
@@ -317,9 +317,9 @@ int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer);
 int rk_textbox_init (rk_textbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
 int rk_textbox_event (rk_textbox *textbox, SDL_Event *event, int *draw);
 int rk_textbox_draw (rk_textbox *textbox, SDL_Renderer *renderer);
-int rk_combobox_init (kiss_combobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
-int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event,int *draw);
-int rk_combobox_draw (kiss_combobox *combobox, SDL_Renderer *renderer);
+int rk_combobox_init (rk_combobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
+int rk_combobox_event (rk_combobox *combobox, SDL_Event *event,int *draw);
+int rk_combobox_draw (rk_combobox *combobox, SDL_Renderer *renderer);
 
 #ifdef __cplusplus
 }
