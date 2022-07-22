@@ -875,7 +875,7 @@ int rk_textbox_draw (rk_textbox *textbox, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_combobox_init (kiss_combobox *combobox, RKWindow *wdw,
+int rk_combobox_init (rk_combobox *combobox, RKWindow *wdw,
 	char *text, RPVector *a, int x, int y, int w, int h) {
 	if (!combobox || !a || !text) {
 		return -1;
@@ -905,7 +905,7 @@ int rk_combobox_init (kiss_combobox *combobox, RKWindow *wdw,
 	return 0;
 }
 
-int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event, int *draw) {
+int rk_combobox_event (rk_combobox *combobox, SDL_Event *event, int *draw) {
 	int firstline, index;
 
 	if (!combobox || !combobox->visible) {
@@ -959,7 +959,7 @@ int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event, int *draw) {
 	return 0;
 }
 
-int rk_combobox_draw (kiss_combobox *combobox, SDL_Renderer *renderer) {
+int rk_combobox_draw (rk_combobox *combobox, SDL_Renderer *renderer) {
 	if (combobox && combobox->wdw) {
 		combobox->visible = combobox->wdw->visible;
 	}
