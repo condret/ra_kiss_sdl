@@ -197,7 +197,7 @@ typedef struct kiss_entry {
 	RKWindow *wdw;
 } kiss_entry;
 
-typedef struct kiss_textbox {
+typedef struct rk_textbox {
 	int visible;
 	int focus;
 	SDL_Rect rect;
@@ -216,7 +216,7 @@ typedef struct kiss_textbox {
 	SDL_Color bg;
 	RKFont font;
 	RKWindow *wdw;
-} kiss_textbox;
+} rk_textbox;
 
 typedef struct kiss_combobox {
 	int visible;
@@ -224,7 +224,7 @@ typedef struct kiss_combobox {
 	kiss_entry entry;
 	RKWindow window;
 	RKVScrollbar vscrollbar;
-	kiss_textbox textbox;
+	rk_textbox textbox;
 	RKImage combo;
 	RKWindow *wdw;
 } kiss_combobox;
@@ -314,9 +314,9 @@ int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer);
 int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w);
 int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw);
 int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer);
-int rk_textbox_init (kiss_textbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
-int rk_textbox_event (kiss_textbox *textbox, SDL_Event *event, int *draw);
-int rk_textbox_draw (kiss_textbox *textbox, SDL_Renderer *renderer);
+int rk_textbox_init (rk_textbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
+int rk_textbox_event (rk_textbox *textbox, SDL_Event *event, int *draw);
+int rk_textbox_draw (rk_textbox *textbox, SDL_Renderer *renderer);
 int rk_combobox_init (kiss_combobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
 int rk_combobox_event (kiss_combobox *combobox, SDL_Event *event,int *draw);
 int rk_combobox_draw (kiss_combobox *combobox, SDL_Renderer *renderer);
