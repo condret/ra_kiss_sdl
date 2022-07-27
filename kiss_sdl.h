@@ -197,7 +197,7 @@ typedef struct kiss_entry {
 	RKWindow *wdw;
 } kiss_entry;
 
-typedef struct rk_textbox {
+typedef struct rk_textbox_t {
 	int visible;
 	int focus;
 	SDL_Rect rect;
@@ -216,18 +216,18 @@ typedef struct rk_textbox {
 	SDL_Color bg;
 	RKFont font;
 	RKWindow *wdw;
-} rk_textbox;
+} RKTextbox;
 
-typedef struct rk_combobox {
+typedef struct rk_combobox_t {
 	int visible;
 	char text[KISS_MAX_LENGTH];
 	kiss_entry entry;
 	RKWindow window;
 	RKVScrollbar vscrollbar;
-	rk_textbox textbox;
+	RKTextbox textbox;
 	RKImage combo;
 	RKWindow *wdw;
-} rk_combobox;
+} RKCombobox;
 
 extern SDL_Color kiss_white, kiss_black, kiss_green, kiss_blue,
 	kiss_lightblue;
@@ -314,12 +314,12 @@ int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer);
 int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w);
 int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw);
 int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer);
-int rk_textbox_init (rk_textbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
-int rk_textbox_event (rk_textbox *textbox, SDL_Event *event, int *draw);
-int rk_textbox_draw (rk_textbox *textbox, SDL_Renderer *renderer);
-int rk_combobox_init (rk_combobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
-int rk_combobox_event (rk_combobox *combobox, SDL_Event *event,int *draw);
-int rk_combobox_draw (rk_combobox *combobox, SDL_Renderer *renderer);
+int RKTextbox_init (RKTextbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
+int RKTextbox_event (RKTextbox *textbox, SDL_Event *event, int *draw);
+int RKTextbox_draw (RKTextbox *textbox, SDL_Renderer *renderer);
+int RKCombobox_init (RKCombobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
+int RKCombobox_event (RKCombobox *combobox, SDL_Event *event,int *draw);
+int RKCombobox_draw (RKCombobox *combobox, SDL_Renderer *renderer);
 
 #ifdef __cplusplus
 }
