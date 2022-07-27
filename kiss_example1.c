@@ -25,7 +25,7 @@
 #include "kiss_sdl.h"
 #include <r_util.h>
 
-static void text_reset(rk_textbox *textbox, RKVScrollbar *vscrollbar) {
+static void text_reset(RKTextbox *textbox, RKVScrollbar *vscrollbar) {
 	r_pvector_sort (textbox->lines, (RPVectorComparator)strcmp);
 	vscrollbar->step = 0.;
 	if (((int)r_pvector_len (textbox->lines)) - textbox->maxlines > 0) {
@@ -37,8 +37,8 @@ static void text_reset(rk_textbox *textbox, RKVScrollbar *vscrollbar) {
 }
 
 /* Read directory entries into the textboxes */
-static void dirent_read(rk_textbox *textbox1, RKVScrollbar *vscrollbar1,
-	rk_textbox *textbox2, RKVScrollbar *vscrollbar2, RKLabel *label_sel) {
+static void dirent_read(RKTextbox *textbox1, RKVScrollbar *vscrollbar1,
+	RKTextbox *textbox2, RKVScrollbar *vscrollbar2, RKLabel *label_sel) {
 
 	r_pvector_clear (textbox1->lines);
 	r_pvector_clear (textbox2->lines);
@@ -82,8 +82,8 @@ static void dirent_read(rk_textbox *textbox1, RKVScrollbar *vscrollbar1,
 }
 
 /* The widget arguments are widgets that this widget talks with */
-static void textbox1_event(rk_textbox *textbox, SDL_Event *e,
-	RKVScrollbar *vscrollbar1, rk_textbox *textbox2,
+static void textbox1_event(RKTextbox *textbox, SDL_Event *e,
+	RKVScrollbar *vscrollbar1, RKTextbox *textbox2,
 	RKVScrollbar *vscrollbar2, RKLabel *label_sel, int *draw) {
 
 	if (rk_textbox_event (textbox, e, draw)) {
@@ -97,7 +97,7 @@ static void textbox1_event(rk_textbox *textbox, SDL_Event *e,
 	}
 }
 
-static void vscrollbar1_event(RKVScrollbar *vscrollbar, SDL_Event *e, rk_textbox *textbox1, int *draw) {
+static void vscrollbar1_event(RKVScrollbar *vscrollbar, SDL_Event *e, RKTextbox *textbox1, int *draw) {
 	int firstline;
 
 	if (rk_vscrollbar_event (vscrollbar, e, draw) &&
@@ -111,7 +111,7 @@ static void vscrollbar1_event(RKVScrollbar *vscrollbar, SDL_Event *e, rk_textbox
 	}
 }
 
-static void textbox2_event(rk_textbox *textbox, SDL_Event *e,
+static void textbox2_event(RKTextbox *textbox, SDL_Event *e,
 	RKVScrollbar *vscrollbar2, kiss_entry *entry, int *draw) {
 	int index;
 
@@ -125,7 +125,7 @@ static void textbox2_event(rk_textbox *textbox, SDL_Event *e,
 	}
 }
 
-static void vscrollbar2_event(RKVScrollbar *vscrollbar, SDL_Event *e, rk_textbox *textbox2, int *draw) {
+static void vscrollbar2_event(RKVScrollbar *vscrollbar, SDL_Event *e, RKTextbox *textbox2, int *draw) {
 	int firstline;
 
 	if (rk_vscrollbar_event (vscrollbar, e, draw) && r_pvector_len (textbox2->lines)) {
@@ -184,7 +184,7 @@ int main (int argc, char **argv) {
 	RKWindow window1, window2;
 	RKLabel label1 = { 0 }, label2 = { 0 }, label_sel = { 0 }, label_res = { 0 };
 	RKButton button_ok1 = { 0 }, button_ok2 = { 0 }, button_cancel = { 0 };
-	rk_textbox textbox1 = { 0 }, textbox2 = { 0 };
+	RKTextbox textbox1 = { 0 }, textbox2 = { 0 };
 	RKVScrollbar vscrollbar1 = { 0 }, vscrollbar2 = { 0 };
 	kiss_progressbar progressbar = { 0 };
 	kiss_entry entry = { 0 };

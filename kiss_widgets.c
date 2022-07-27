@@ -762,7 +762,7 @@ int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_textbox_init (rk_textbox *textbox, RKWindow *wdw, int decorate,
+int rk_textbox_init (RKTextbox *textbox, RKWindow *wdw, int decorate,
 	RPVector *lines, int x, int y, int w, int h) {
 	if (!textbox || !lines) {
 		return -1;
@@ -792,7 +792,7 @@ int rk_textbox_init (rk_textbox *textbox, RKWindow *wdw, int decorate,
 	return 0;
 }
 
-static int textbox_numoflines(rk_textbox *textbox) {
+static int textbox_numoflines(RKTextbox *textbox) {
 	int numoflines = textbox->maxlines;
 	if (((int)r_pvector_len (textbox->lines)) - textbox->firstline < textbox->maxlines) {
 		numoflines = ((int)r_pvector_len (textbox->lines)) - textbox->firstline;
@@ -800,7 +800,7 @@ static int textbox_numoflines(rk_textbox *textbox) {
 	return numoflines;
 }
 
-int rk_textbox_event (rk_textbox *textbox, SDL_Event *event, int *draw) {
+int rk_textbox_event (RKTextbox *textbox, SDL_Event *event, int *draw) {
 	int texty, textmaxy, numoflines;
 
 	if (!textbox || !textbox->visible || !event || !textbox->lines || !r_pvector_len (textbox->lines)) {
@@ -839,7 +839,7 @@ int rk_textbox_event (rk_textbox *textbox, SDL_Event *event, int *draw) {
 	return 0;
 }
 
-int rk_textbox_draw (rk_textbox *textbox, SDL_Renderer *renderer) {
+int rk_textbox_draw (RKTextbox *textbox, SDL_Renderer *renderer) {
 	SDL_Rect highlightrect;
 	char buf[KISS_MAX_LENGTH];
 	int numoflines, i;
@@ -875,7 +875,7 @@ int rk_textbox_draw (rk_textbox *textbox, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_combobox_init (rk_combobox *combobox, RKWindow *wdw,
+int rk_combobox_init (RKCombobox *combobox, RKWindow *wdw,
 	char *text, RPVector *a, int x, int y, int w, int h) {
 	if (!combobox || !a || !text) {
 		return -1;
@@ -905,7 +905,7 @@ int rk_combobox_init (rk_combobox *combobox, RKWindow *wdw,
 	return 0;
 }
 
-int rk_combobox_event (rk_combobox *combobox, SDL_Event *event, int *draw) {
+int rk_combobox_event (RKCombobox *combobox, SDL_Event *event, int *draw) {
 	int firstline, index;
 
 	if (!combobox || !combobox->visible) {
@@ -959,7 +959,7 @@ int rk_combobox_event (rk_combobox *combobox, SDL_Event *event, int *draw) {
 	return 0;
 }
 
-int rk_combobox_draw (rk_combobox *combobox, SDL_Renderer *renderer) {
+int rk_combobox_draw (RKCombobox *combobox, SDL_Renderer *renderer) {
 	if (combobox && combobox->wdw) {
 		combobox->visible = combobox->wdw->visible;
 	}
