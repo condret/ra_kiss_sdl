@@ -615,7 +615,7 @@ int rk_hscrollbar_draw (RKHScrollbar *hscrollbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_progressbar_init (kiss_progressbar *progressbar, RKWindow *wdw, int x, int y, int w) {
+int rk_progressbar_init (RKProgressbar *progressbar, RKWindow *wdw, int x, int y, int w) {
 	if (!progressbar || w < 2 * kiss_border + 1) {
 		return -1;
 	}
@@ -637,7 +637,17 @@ int rk_progressbar_init (kiss_progressbar *progressbar, RKWindow *wdw, int x, in
 	return 0;
 }
 
-int rk_progressbar_event (kiss_progressbar *progressbar, SDL_Event *event, int *draw) {
+RKProgressbar *rk_progressbar_new (RKWindow *wdw, int x, int y, int w) {
+	RKProgressbar *pbar = R_NEW0 (RKProgressbar);
+	if (pbar) {
+		if (rk_progressbar_init (pbar, wdw, x, y, w)) {
+			R_FREE (pbar);
+		}
+	}
+	return pbar;
+}
+
+int rk_progressbar_event (RKProgressbar *progressbar, SDL_Event *event, int *draw) {
 	if (!progressbar || !progressbar->visible) {
 		return 0;
 	}
@@ -653,7 +663,7 @@ int rk_progressbar_event (kiss_progressbar *progressbar, SDL_Event *event, int *
 	return 1;
 }
 
-int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer) {
+int rk_progressbar_draw (RKProgressbar *progressbar, SDL_Renderer *renderer) {
 	SDL_Rect clip;
 
 	if (progressbar && progressbar->wdw) {

@@ -145,7 +145,7 @@ typedef struct rk_vertical_scrollbar_t {
 	RKWindow *wdw;
 } RKVScrollbar;
 
-typedef struct rk_horizontal_scrollbar {
+typedef struct rk_horizontal_scrollbar_t {
 	int visible;
 	int focus;
 	SDL_Rect leftrect;
@@ -164,7 +164,7 @@ typedef struct rk_horizontal_scrollbar {
 	RKWindow *wdw;
 } RKHScrollbar;
 
-typedef struct kiss_progressbar {
+typedef struct rk_progressbar_t {
 	int visible;
 	SDL_Rect rect;
 	SDL_Rect barrect;
@@ -176,7 +176,7 @@ typedef struct kiss_progressbar {
 	int run;
 	RKImage bar;
 	RKWindow *wdw;
-} kiss_progressbar;
+} RKProgressbar;
 
 typedef struct kiss_entry {
 	int visible;
@@ -309,9 +309,10 @@ int rk_hscrollbar_init (RKHScrollbar *hscrollbar, RKWindow *wdw, int x, int y, i
 RKHScrollbar *rk_hscrollbar_new (RKWindow *wdw, int x, int y, int w);
 int rk_hscrollbar_event (RKHScrollbar *hscrollbar, SDL_Event *event, int *draw);
 int rk_hscrollbar_draw (RKHScrollbar *hscrollbar, SDL_Renderer *renderer);
-int rk_progressbar_init (kiss_progressbar *progressbar, RKWindow *wdw, int x, int y, int w);
-int rk_progressbar_event (kiss_progressbar *progressbar, SDL_Event *event, int *draw);
-int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer);
+int rk_progressbar_init (RKProgressbar *progressbar, RKWindow *wdw, int x, int y, int w);
+RKProgressbar *rk_progressbar_new (RKWindow *wdw, int x, int y, int w);
+int rk_progressbar_event (RKProgressbar *progressbar, SDL_Event *event, int *draw);
+int rk_progressbar_draw (RKProgressbar *progressbar, SDL_Renderer *renderer);
 int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w);
 int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw);
 int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer);
