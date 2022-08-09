@@ -145,7 +145,7 @@ typedef struct rk_vertical_scrollbar_t {
 	RKWindow *wdw;
 } RKVScrollbar;
 
-typedef struct kiss_hscrollbar {
+typedef struct rk_horizontal_scrollbar {
 	int visible;
 	int focus;
 	SDL_Rect leftrect;
@@ -162,7 +162,7 @@ typedef struct kiss_hscrollbar {
 	RKImage right;
 	RKImage hslider;
 	RKWindow *wdw;
-} kiss_hscrollbar;
+} RKHScrollbar;
 
 typedef struct kiss_progressbar {
 	int visible;
@@ -305,21 +305,22 @@ int rk_vscrollbar_init (RKVScrollbar *vscrollbar, RKWindow *wdw, SDL_Rect *wheel
 RKVScrollbar *rk_vscrollbar_new (RKWindow *wdw, SDL_Rect *wheelrect, int x, int y, int h);
 int rk_vscrollbar_event (RKVScrollbar *vscrollbar, SDL_Event *event,int *draw);
 int rk_vscrollbar_draw (RKVScrollbar *vscrollbar, SDL_Renderer *renderer);
-int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, RKWindow *wdw, int x, int y, int w);
-int rk_hscrollbar_event (kiss_hscrollbar *hscrollbar, SDL_Event *event, int *draw);
-int rk_hscrollbar_draw (kiss_hscrollbar *hscrollbar, SDL_Renderer *renderer);
+int rk_hscrollbar_init (RKHScrollbar *hscrollbar, RKWindow *wdw, int x, int y, int w);
+RKHScrollbar *rk_hscrollbar_new (RKWindow *wdw, int x, int y, int w);
+int rk_hscrollbar_event (RKHScrollbar *hscrollbar, SDL_Event *event, int *draw);
+int rk_hscrollbar_draw (RKHScrollbar *hscrollbar, SDL_Renderer *renderer);
 int rk_progressbar_init (kiss_progressbar *progressbar, RKWindow *wdw, int x, int y, int w);
 int rk_progressbar_event (kiss_progressbar *progressbar, SDL_Event *event, int *draw);
 int rk_progressbar_draw (kiss_progressbar *progressbar, SDL_Renderer *renderer);
 int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w);
 int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw);
 int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer);
-int RKTextbox_init (RKTextbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
-int RKTextbox_event (RKTextbox *textbox, SDL_Event *event, int *draw);
-int RKTextbox_draw (RKTextbox *textbox, SDL_Renderer *renderer);
-int RKCombobox_init (RKCombobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
-int RKCombobox_event (RKCombobox *combobox, SDL_Event *event,int *draw);
-int RKCombobox_draw (RKCombobox *combobox, SDL_Renderer *renderer);
+int rk_textbox_init (RKTextbox *textbox, RKWindow *wdw, int decorate, RPVector *a, int x, int y, int w, int h);
+int rk_textbox_event (RKTextbox *textbox, SDL_Event *event, int *draw);
+int rk_textbox_draw (RKTextbox *textbox, SDL_Renderer *renderer);
+int rk_combobox_init (RKCombobox *combobox, RKWindow *wdw, char *text, RPVector *a, int x, int y, int w, int h);
+int rk_combobox_event (RKCombobox *combobox, SDL_Event *event,int *draw);
+int rk_combobox_draw (RKCombobox *combobox, SDL_Renderer *renderer);
 
 #ifdef __cplusplus
 }

@@ -461,7 +461,7 @@ int rk_vscrollbar_draw (RKVScrollbar *vscrollbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, RKWindow *wdw, int x, int y, int w) {
+int rk_hscrollbar_init (RKHScrollbar *hscrollbar, RKWindow *wdw, int x, int y, int w) {
 	if (!hscrollbar) {
 		return -1;
 	}
@@ -498,7 +498,17 @@ int rk_hscrollbar_init (kiss_hscrollbar *hscrollbar, RKWindow *wdw, int x, int y
 	return 0;
 }
 
-static void hnewpos(kiss_hscrollbar *hscrollbar, double step, int *draw) {
+RKHScrollbar *rk_hscrollbar_new (RKWindow *wdw, int x, int y, int w) {
+	RKHScrollbar *hsb = R_NEW0 (RKHScrollbar);
+	if (hsb) {
+		if (rk_hscrollbar_init (hsb, wdw, x, y, w)) {
+			R_FREE (hsb);
+		}
+	}
+	return hsb;
+}
+
+static void hnewpos(RKHScrollbar *hscrollbar, double step, int *draw) {
 	*draw = 1;
 	hscrollbar->fraction += step;
 	hscrollbar->lasttick = rk_getticks ();
@@ -517,7 +527,7 @@ static void hnewpos(kiss_hscrollbar *hscrollbar, double step, int *draw) {
 	hscrollbar->rightclicked = 0;
 }
 
-int rk_hscrollbar_event (kiss_hscrollbar *hscrollbar, SDL_Event *event, int *draw) {
+int rk_hscrollbar_event (RKHScrollbar *hscrollbar, SDL_Event *event, int *draw) {
 	if (!hscrollbar || !hscrollbar->visible) {
 		return 0;
 	}
@@ -586,7 +596,7 @@ int rk_hscrollbar_event (kiss_hscrollbar *hscrollbar, SDL_Event *event, int *dra
 	return 0;
 }
 
-int rk_hscrollbar_draw (kiss_hscrollbar *hscrollbar, SDL_Renderer *renderer) {
+int rk_hscrollbar_draw (RKHScrollbar *hscrollbar, SDL_Renderer *renderer) {
 	if (hscrollbar && hscrollbar->wdw) {
 		hscrollbar->visible = hscrollbar->wdw->visible;
 	}
