@@ -681,7 +681,7 @@ int rk_progressbar_draw (RKProgressbar *progressbar, SDL_Renderer *renderer) {
 	return 1;
 }
 
-int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w) {
+int rk_entry_init (RKEntry *entry, RKWindow *wdw, int decorate, char *text, int x, int y, int w) {
 	if (!entry || !text) {
 		return -1;
 	}
@@ -707,7 +707,17 @@ int rk_entry_init (kiss_entry *entry, RKWindow *wdw, int decorate, char *text, i
 	return 0;
 }
 
-int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw) {
+RKEntry *rk_entry_new (RKWindow *wdw, int decorate, char *text, int x, int y, int w) {
+	RKEntry *entry = R_NEW0 (RKEntry);
+	if (entry) {
+		if (rk_entry_init (entry, wdw, decorate, text, x, y, w)) {
+			R_FREE (entry);
+		}
+	}
+	return entry;
+}
+
+int rk_entry_event (RKEntry *entry, SDL_Event *event, int *draw) {
 	if (!entry || !entry->visible || !event) {
 		return 0;
 	}
@@ -757,7 +767,7 @@ int rk_entry_event (kiss_entry *entry, SDL_Event *event, int *draw) {
 	return 0;
 }
 
-int rk_entry_draw (kiss_entry *entry, SDL_Renderer *renderer) {
+int rk_entry_draw (RKEntry *entry, SDL_Renderer *renderer) {
 	SDL_Color color;
 
 	if (entry && entry->wdw) {

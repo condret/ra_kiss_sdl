@@ -71,7 +71,7 @@ static void select2_event(RKSelectButton *select2, SDL_Event *e, RKSelectButton 
 }
 
 static void combobox_event(RKCombobox *combobox, SDL_Event *e,
-	char *stext, kiss_entry *entry, RKSelectButton *select1,
+	char *stext, RKEntry *entry, RKSelectButton *select1,
 	RKSelectButton *select2, RKHScrollbar *hscrollbar, int *draw) {
 
 	void *s = combobox->entry.text;
@@ -106,7 +106,7 @@ static void combobox_event(RKCombobox *combobox, SDL_Event *e,
 
 /* This is to show the hscrollbar, only works with ASCII characters */
 static void hscrollbar_event(RKHScrollbar *hscrollbar, SDL_Event *e,
-	char *stext, int *first, kiss_entry *entry, int *draw) {
+	char *stext, int *first, RKEntry *entry, int *draw) {
 	char *p = stext;
 
 	if (rk_hscrollbar_event (hscrollbar, e, draw) && strlen (stext) - entry->textwidth / kiss_textfont.advance > 0) {
@@ -127,7 +127,7 @@ int main (int argc, char **argv) {
 	RKLabel label1 = { 0 }, label2 = { 0 };
 	RKButton button_ok = { 0 };
 	RKHScrollbar hscrollbar = { 0 };
-	kiss_entry entry = { 0 };
+	RKEntry entry = { 0 };
 	RKCombobox combobox = { 0 };
 	RKSelectButton select1 = { 0 }, select2 = { 0 };
 	char stext[KISS_MAX_LENGTH];

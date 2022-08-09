@@ -112,7 +112,7 @@ static void vscrollbar1_event(RKVScrollbar *vscrollbar, SDL_Event *e, RKTextbox 
 }
 
 static void textbox2_event(RKTextbox *textbox, SDL_Event *e,
-	RKVScrollbar *vscrollbar2, kiss_entry *entry, int *draw) {
+	RKVScrollbar *vscrollbar2, RKEntry *entry, int *draw) {
 	int index;
 
 	if (rk_textbox_event (textbox, e, draw)) {
@@ -140,7 +140,7 @@ static void vscrollbar2_event(RKVScrollbar *vscrollbar, SDL_Event *e, RKTextbox 
 
 static void button_ok1_event(RKButton *button, SDL_Event *e,
 	RKWindow *window1, RKWindow *window2, RKLabel *label_sel,
-	kiss_entry *entry, RKLabel *label_res,
+	RKEntry *entry, RKLabel *label_res,
 	RKProgressbar *progressbar, int *draw) {
 	char buf[KISS_MAX_LENGTH];
 
@@ -187,7 +187,7 @@ int main (int argc, char **argv) {
 	RKTextbox textbox1 = { 0 }, textbox2 = { 0 };
 	RKVScrollbar vscrollbar1 = { 0 }, vscrollbar2 = { 0 };
 	RKProgressbar progressbar = { 0 };
-	kiss_entry entry = { 0 };
+	RKEntry entry = { 0 };
 
 	int quit = 0;
 	int draw = 1;
